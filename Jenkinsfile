@@ -14,7 +14,7 @@ node("build") {
         stageDevin ("🐳 Build docker") {
             echo "🐳 Construction Docker"
             dockerBuild{
-                dockerContext = "Dockerfile,package-lock.json"
+                dockerContext = "Dockerfile"
                 repo = "gridcapa"
                 imgName = "gridcapa-doc-caddy"
                 keepBuiltImage = false
