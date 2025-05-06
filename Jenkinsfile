@@ -7,23 +7,14 @@ properties([
 
 node("build") {
     try {
-        stageDevin ("🦊 Checkout") {
+        stageDevin ("Checkout") {
             gitCheckout {}
         }
 
-        stageDevin ("🐳 Build docker") {
-            echo "🐳 Construction Docker"
-            dockerBuild{
-                dockerContext = "Dockerfile,package.json"
-                repo = "gridcapa"
-                imgName = "gridcapa-doc-caddy"
-                keepBuiltImage = false
-                cleanWorkspace = true
-                targetPtf = "gridcapa"
-                push = true
-                path = "./"
-                registry = "inca.rte-france.com"
-                prefixRegistry = true
+        stageDevin ("Build website") {
+            npmInstall {}
+            npm {
+                args = "run build"
             }
         }
 
