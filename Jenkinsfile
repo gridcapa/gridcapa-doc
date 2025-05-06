@@ -18,6 +18,21 @@ node("build") {
             }
         }
 
+        stageDevin("Deploy in docker") {
+            dockerBuild {
+            	dockerContext= "Dockerfile,Caddyfile,build"
+                repo = "gridcapa"
+                imgName = "gridcapa-doc"
+                keepBuiltImage = false
+                cleanWorkspace = true
+                targetPtf = "gridcapa"
+                push = true
+                registry = "inca.rte-france.com"
+                prefixRegistry = true
+            }
+
+        }
+
     } catch (Exception e) {
         notify {
             to = maintainers
