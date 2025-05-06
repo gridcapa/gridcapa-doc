@@ -26,7 +26,7 @@ WORKDIR /opt/docusaurus
 ## Copy over the source code.
 COPY . /opt/docusaurus/
 ## Install dependencies with `--immutable` to ensure reproducibility.
-RUN npm ci
+RUN npm install
 ## Build the static site.
 RUN npm run build
 
