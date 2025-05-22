@@ -1,0 +1,26 @@
+server {
+    listen       80;
+    listen  [::]:80;
+    server_name  localhost;
+
+    location / {
+        root   /usr/share/nginx/html;
+        index  index.html index.htm;
+        # The try_files instruction avoids default Nginx redirections to add trailing slash to URL when possible
+        try_files $uri $uri/index.html $uri/ /404.html;
+
+        # Activate SSI (Server Side Includes) on HTML and JS files
+        ssi on;
+        ssi_types text/html application/javascript;
+        # Set SSI variable values using environment variables
+        set $URL "${DOCU_URL}";
+        set $BASE_URL "${DOCU_BASE_URL}";
+    }
+
+    # This part of configuration is Nginx's default one
+    # TODO Create a "50X.html" page if we want to handle those errors
+    error_page   500 502 503 504  /50x.html;
+    location = /50x.html {
+        root   /usr/share/nginx/html;
+    }
+}
