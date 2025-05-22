@@ -12,11 +12,9 @@ const config: Config = {
   favicon: 'img/favicon.ico',
 
   // Set the production url of your site here
-  // TODO set the production URL before publishing
-  url: 'https://your-docusaurus-site.example.com',
+  url: 'http://PLACEHOLDER_URL/',
   // Set the /<baseUrl>/ pathname under which your site is served
-  // For GitHub pages deployment, it is often '/<projectName>/'
-  baseUrl: '/',
+  baseUrl: '/PLACEHOLDER_BASE_URL/',
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
