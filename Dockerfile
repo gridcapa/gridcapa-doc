@@ -1,4 +1,4 @@
-FROM inca.rte-france.com/rtsi/nginx:latest
+FROM inca.rte-france.com/rtsi/nginx:1.21.5-alpine3.15.0
 ## Copy the Docusaurus build output.
 COPY build /usr/share/nginx/html/
 ## Replace URL and baseURL placeholders with Nginx SSI (Server Side Includes) instruction
