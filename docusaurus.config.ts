@@ -41,17 +41,6 @@ const config: Config = {
           remarkPlugins: [remarkMath],
           rehypePlugins: [rehypeKatex],
         },
-        blog: {
-          showReadingTime: true,
-          feedOptions: {
-            type: ['rss', 'atom'],
-            xslt: true,
-          },
-          // Useful options to enforce blogging best practices
-          onInlineTags: 'warn',
-          onInlineAuthors: 'warn',
-          onUntruncatedBlogPosts: 'warn',
-        },
         theme: {
           customCss: './src/css/custom.css',
         },
@@ -84,7 +73,6 @@ const config: Config = {
           position: 'left',
           label: 'Documentation',
         },
-        {to: '/blog', label: 'Blog', position: 'left'},
         {
           href: 'https://github.com/farao-community/gridcapa-docs',
           label: 'GitHub',
@@ -128,16 +116,8 @@ const config: Config = {
               to: '/docs/process-documentation/core-cc/overview',
             },
             {
-              label: 'IN export Capacity Calculation',
-              to: '/docs/process-documentation/in-export-cc/overview',
-            },
-            {
-              label: 'IN import Capacity Calculation',
-              to: '/docs/process-documentation/in-import-cc/overview',
-            },
-            {
-              label: 'IN import EC Capacity Calculation',
-              to: '/docs/process-documentation/in-import-ec-cc/overview',
+              label: 'IN Capacity Calculation',
+              to: '/docs/process-documentation/in-cc/overview',
             },
             {
               label: 'SWE Capacity Calculation',
@@ -148,10 +128,6 @@ const config: Config = {
         {
           title: 'More',
           items: [
-            {
-              label: 'Blog',
-              to: '/blog',
-            },
             {
               label: 'GitHub',
               href: 'https://github.com/farao-community/gridcapa-docs',
