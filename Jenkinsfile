@@ -20,7 +20,7 @@ node("build") {
 
         stageDevin("Deploy in docker") {
             dockerBuild {
-            	dockerContext= "Dockerfile,build/**"
+            	dockerContext= "Dockerfile,build/**,custom-nginx.conf.template"
                 repo = "gridcapa"
                 imgName = "gridcapa-doc"
                 keepBuiltImage = false
