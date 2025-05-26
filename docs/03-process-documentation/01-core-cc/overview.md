@@ -18,8 +18,8 @@ The **CORE Capacity Calculation Region (CCR)** spans most of continental Europe 
 - **Critical Network Elements (CNECs)**: TSOs define Critical Network Elements with Contingencies (CNECs), which are monitored during the capacity calculation to ensure security constraints are respected. These are selected based on operational experience and regular analysis.
 
 - **Remedial Actions**: CORE includes coordinated **preventive** and **curative** remedial actions:
-  - *Preventive*: Applied before market coupling (e.g., topological changes).
-  - *Curative*: Considered for post-market, real-time operations (e.g., redispatching).
+  - *Preventive*: Implemented before real-time operations, such as topology changes are PST taps change.
+  - *Curative*: Applied during real-time operations, in response to a contingency.
     These actions are coordinated among TSOs to increase available capacity and manage congestions.
 
 - **Generation Shift Keys (GLSKs)**: Each TSO provides GLSKs that define how generation or load variations are distributed in their area, helping to simulate market behavior during capacity calculation.
@@ -27,6 +27,7 @@ The **CORE Capacity Calculation Region (CCR)** spans most of continental Europe 
 - **Capacity Calculation Process**:
   - TSOs submit individual grid models and remedial action lists.
   - A **Common Grid Model (CGM)** is built from these inputs.
+  - A **remedial actions optimisation** is run to select optimal set of RAs to ensure maximum secure exchanges.
   - The **flow-based calculation** evaluates simultaneous power exchanges and their impact on the network.
   - The available margins are computed based on constraints on CNECs, taking into account coordinated remedial actions.
   - Final flow-based parameters (PTDFs, RAMs, and critical branches) are delivered for market coupling.

@@ -17,9 +17,8 @@ Its capacity calculation process is a coordinated effort by the Transmission Sys
 
 - **Critical Network Elements (CNEs)**: TSOs identify and monitor CNEs that significantly influence cross-zonal power exchanges. These elements are selected based on a sensitivity analysis, which is updated at least annually.
 
-- **Remedial Actions**: Both **preventive** and **curative** remedial actions are considered. These include:
-    - Non-costly measures: e.g., topology changes, HVDC modulation.
-    - Costly measures: e.g., redispatching, countertrading.
+- **Remedial Actions**: Both **preventive** and **curative** remedial actions are considered. These include non-costly measures (e.g., topology changes, HVDC modulation) that can be used for solving flow constraints, voltage constraints, or even angle constraints.
+      Some automaton are also modeled that automatically use remedial actions in response to constraint on the grid.
       The list of applicable remedial actions is reviewed regularly to adapt to changing grid conditions.
 
 - **Generation and Load Shift Keys (GLSKs)**: Each TSO defines GLSKs based on their best forecast of market behavior, reflecting expected generation and load patterns.

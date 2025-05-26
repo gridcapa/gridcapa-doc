@@ -18,8 +18,8 @@ The Transmission System Operators (TSOs) involved—**Terna** (Italy), **RTE** (
 - **Critical Network Elements (CNEs)**: TSOs identify and monitor CNEs that significantly influence cross-zonal power exchanges. These elements are selected based on sensitivity analyses and are reviewed periodically to reflect changing grid conditions.
 
 - **Remedial Actions**: Both **preventive** and **curative** remedial actions are considered to maximize available capacity:
-    - *Preventive actions*: Implemented before real-time operations, such as topology changes.
-    - *Curative actions*: Applied during real-time operations, including redispatching and countertrading.
+    - *Preventive actions*: Implemented before real-time operations, such as topology changes are PST taps change.
+    - *Curative actions*: Applied during real-time operations, in response to a contingency.
 
 - **Generation and Load Shift Keys (GLSKs)**: Each TSO defines GLSKs to model how generation and load adjustments affect power flows, aiding in accurate capacity calculations.
 
