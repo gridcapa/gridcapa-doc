@@ -4,170 +4,169 @@ sidebar_position: 3
 # Process description
 ## Input data preprocessing
 ### Merchant line Mendrisio-Cagno target flow
-The Mendrisio-Cagno interconnection line between Switzerland and Italy is a Merchant Line (i.e. operated by private investors) which power exchange and capacity is handled by specific contracts.
-For this reason, Mendrisio PST is used to enforce the active power flow on the interconnection line to a specified target which is provided as an input of the process.
+The Mendrisio-Cagno interconnection line between Switzerland and Italy is a Merchant Line (i.e., operated by private investors) whose power exchange and capacity are handled by specific contracts.
+For this reason, the Mendrisio PST is used to enforce the active power flow on the interconnection line to a specified target which is provided as an input to the process.
 
-First, the target flow on the interconnection (and the PST) is calculated.
-- **For D2CC**, Mendrisio-Cagno target flow calculation is based on the following input files:
-    D2CC inputs contain many values that are admissible as target flow for Mendrisio Cagno merchant line:
-    - The one defined in NTC annual file. 
-    - The many defined in Target CH file if associated outage is actually applied on the CGM.
-    The minimum value among all the admissible target flow is kept, with a potential offset (that can be either positive or negative) which value is the load associated to Mendrisio node in the CGM.
-- **For IDCC**, Mendrisio-Cagno target flow is directly retrieved from NTC annual input.
+First, the target flow on the interconnection (and the PST) is calculated:
+- **For D2CC**, the Mendrisio-Cagno target flow calculation is based on the following input files:
+    D2CC inputs contain multiple values that are admissible as target flows for the Mendrisio-Cagno merchant line:
+    - The value defined in the NTC annual file. 
+    - The values defined in the Target CH file if the associated outage is actually applied on the CGM.
+    The minimum value among all the admissible target flows is selected, with a potential offset (that can be either positive or negative) whose value is the load associated with the Mendrisio node in the CGM.
+- **For IDCC**, the Mendrisio-Cagno target flow is directly retrieved from the NTC annual input.
 
-When the target flow is correctly calculated, it is applied as a regulation value for Mendrisio PST, and the flow regulation is then activated. It ensures that the loadflow and sensitivity computation engines will change PST taps automatically in order to ensure that the flow on the PST is always approximately equal to the target flow.
+When the target flow is correctly calculated, it is applied as a regulation value for the Mendrisio PST, and the flow regulation is then activated. This ensures that the loadflow and sensitivity computation engines will automatically change PST taps to maintain the flow on the PST approximately equal to the target flow.
 
-> **ℹ️** By default, UCTE import PowSyBl does not put PSTs as regulated, this is why Mendrisio PST as to be manually set as regulated. 
-> Some tests have been done in the past to set PSTs regulation as active by default if some regulations are specified in the UCTE network, but this way CSE networks was not converging anymore in AC and this prevented to go further in this direction. It may be reassessed in the future, when resilience of the loadflow engine will be improved.
+> **ℹ️** By default, UCTE import in PowSyBl does not set PSTs as regulated, which is why the Mendrisio PST has to be manually set as regulated. 
+> Some tests have been conducted in the past to set PST regulation as active by default when regulations are specified in the UCTE network, but this approach caused CSE networks to no longer converge in AC, preventing further progress in this direction. This approach may be reassessed in the future when the resilience of the loadflow engine is improved.
 
 ### PiSa HVDC alignment
 The PiSA HVDC line is an HVDC interconnection between France and Italy composed of two HVDC links.
 
-As UCT format does not allow to model such a device in the CGM, an equivalent model is used, composed of three AC lines and two generators for each HVDC link.
+As the UCT format does not allow modeling such a device in the CGM, an equivalent model is used, consisting of three AC lines and two generators for each HVDC link.
 
 ![PiSa equivalent model](/img/in-import-ec/pisaModel.png)
 
 Each HVDC link can be operated in two modes:
-- Fixed set point: all AC lines are disconnected, and the generators are configured with a power set point equal to the target flow of the link (each side of the HVDC must have approximately opposite target flow, with a sign depending on the direction of flow on the border)
-- AC emulation: any AC line is connected (only one should be connected at any time, depending of the angle droop gain coefficient actually used for regulation), and the generators power set point is equal to 0.
+- Fixed set point: all AC lines are disconnected, and the generators are configured with a power set point equal to the target flow of the link (each side of the HVDC must have approximately opposite target flows, with signs depending on the direction of flow at the border)
+- AC emulation: one AC line is connected (only one should be connected at any time, depending on the angle droop gain coefficient actually used for regulation), and the generators' power set points are equal to 0.
 
-It may be possible that, for some reason, initial modelling of PiSa HVDC is not correctly aligned. As a response to this issue, the equivalent model's generators power set point are aligned. The generator with maximum power set point in absolute value is considered as the reference for the HVDC set point: the other generator's power set point is set to the opposite value.
+It is possible that, for various reasons, the initial modeling of the PiSa HVDC is not correctly aligned. To address this issue, the equivalent model's generators' power set points are aligned. The generator with the maximum power set point in absolute value is considered as the reference for the HVDC set point: the other generator's power set point is set to the opposite value.
 
-All HVDC aligned set points are saved as they will be used at the end of the process during TTC res export.
+All HVDC aligned set points are saved as they will be used at the end of the process during the TTC res export.
 
-> ⚠️ For IDCC process, an extra preprocessing is applied forcing the HVDC in fixed set point mode, with a set point value depending on available remedial actions in CRAC. This process is described in section PiSa setpoint.
+> ⚠️ For the IDCC process, an extra preprocessing step is applied, forcing the HVDC into fixed set point mode, with a set point value depending on available remedial actions in the CRAC. This process is described in the PiSa setpoint section.
 
 > **?** Open questions:
-> - In D2CC, the HVDC seems to be implicitely operated in fixed set point, but it is never checked that AC lines are open. Should we open them, to ensure there is no issue ?
+> - In D2CC, the HVDC seems to be implicitly operated in fixed set point mode, but it is never checked whether AC lines are open. Should we open them to ensure there are no issues?
 ### CRAC/CGM alignment
 #### Busbar change
-Some topological remedial actions defined in CRAC file consist on moving a branch connection from a given node to another one. As CGM is not detailed enough - with all switches needed to model such an operation - a preprocessing is done to ensure that those remedial actions are correctly taken into account during the optimisation.
+Some topological remedial actions defined in the CRAC file involve moving a branch connection from one node to another. Since the CGM is not detailed enough—lacking all the switches needed to model such an operation—a preprocessing step is performed to ensure that these remedial actions are correctly taken into account during the optimization.
 
-First if the final node does not exist in the initial network file, it is created by the pre-processing.
+First, if the destination node does not exist in the initial network file, it is created during the preprocessing.
 
-Then, in order to avoid having to change the network topology, a fictive node is created. It allows to turn the busbar change remedial action into sets of switch opening/closing remedial actions.
+Then, to avoid having to change the network topology, a fictive node is created. This allows the conversion of busbar change remedial actions into sets of switch opening/closing remedial actions.
 
 ![Topological RAs preprocessing](/img/in-import-ec/topologicalRAsPreprocessing.png)
 
-These modifications are saved in order to be able to remove these fictive nodes before exporting Final CGM.
+These modifications are saved so that these fictive nodes can be removed before exporting the Final CGM.
 
 > **?** Open questions:
-> - Initial CGM output (i.e. output after initial shift) does not seem to be post processed to remove these fictive nodes created to model the bus bar change. Is it normal ?
+> - The Initial CGM output (i.e., output after initial shift) does not seem to be post-processed to remove these fictive nodes created to model the busbar change. Is this normal?
 
 #### PiSa setpoint
 
-For IDCC process only, if HVDC link is operated in AC emulation, the following treatment is applied:
-- the HVDC link is switched to fixed set point mode ; the equivalent model's generators are connected and the equivalent model's AC lines are disconnected. 
-- the generators' set point is calculated based on their diagram limits in the CGM and available "HVDC" remedial actions on the equivalent generators in CRAC file. We consider the intersection of each of the generators's admissible active power range, both in CGM and available RAs. The chosen set point is the maximum set point from France to Italy in this intersection.
+For the IDCC process only, if the HVDC link is operated in AC emulation, the following treatment is applied:
+- The HVDC link is switched to fixed set point mode; the equivalent model's generators are connected and the equivalent model's AC lines are disconnected. 
+- The generators' set points are calculated based on their diagram limits in the CGM and available "HVDC" remedial actions on the equivalent generators in the CRAC file. We consider the intersection of each generator's admissible active power range, both in the CGM and available RAs. The chosen set point is the maximum set point from France to Italy within this intersection.
 
 > **?** Open questions:
-> - Why is IDCC treatment different than D2CC one ? Is it justified or only due to the fact that equivalent model in D2CC input is always in fixed setpoint ? In this case the code should be simplified to ensure there is no unneeded distinction between those two processes.
+> - Why is the IDCC treatment different from the D2CC one? Is it justified, or is it only due to the fact that the equivalent model in D2CC input is always in fixed set point mode? In the latter case, should the code be simplified to ensure there is no unnecessary distinction between these two processes?
 
 #### PSTs range enforcement
 
-CASTOR is not be able to optimize a PST if its initial tap is out of admissible range defined in the CRAC.
+CASTOR is not able to optimize a PST if its initial tap is outside the admissible range defined in the CRAC.
 
-In order to mitigate the risk of suboptimality implied by removing a flexibility in the optimisation, it has been chosen to pre-process the network in order to change the initial tap of PSTs that are out of their admissible ranges (and only these ones).
-These PSTs will be set to their minimal admissible tap.
+To mitigate the risk of suboptimality caused by removing flexibility in the optimization, the network is pre-processed to adjust the initial tap of PSTs that are outside their admissible ranges (and only these ones).
+These PSTs are set to their minimal admissible tap.
 
-As it is a pre-processing directly on network file, this modification will be hidden in the final RAO result, but must be considered as a remedial action, even if not modified afterwards during the RAO step. In order to make this change appear in the computation result, these PST taps changes are saved to be used at the end of the process during TTC res export.
+As this is a pre-processing step applied directly to the network file, this modification will not be visible in the final RAO result, but must be considered as a remedial action, even if not modified later during the RAO step. To make this change visible in the computation result, these PST tap changes are saved to be used at the end of the process during the TTC res export.
 
 > **?** Open questions:
-> - For sake of simplicity, it has been chosen to always go to the minimal tap of the admissible range, even if the initial tap was over the maximal tap of the range. As PST is optimized it may not have any impact on the result, but modifying this logic to the more intuitive one of going to the "nearest tap in the range" could improve convergence of the loadflow.
+> - For the sake of simplicity, we have chosen to always set PSTs to the minimal tap of the admissible range, even if the initial tap was above the maximum tap of the range. Since the PST is optimized, this may not impact the final result, but modifying this logic to use the more intuitive approach of setting to the "nearest tap in the range" could improve convergence of the loadflow.
 
 ### Splitting factors
 
-Northern Italian Border capacity calculation  aims is to provide a maximum northern italian import transfer capacity. In order to simulate an import increase on northern italian border, export from the border countries (France, Switzerland, Austria, and Slovenia) are increased proportionnaly, with a fix proportion throughout the process called splitting factor.
+The Northern Italian Border capacity calculation aims to provide a maximum Northern Italian import transfer capacity. To simulate an import increase on the Northern Italian border, exports from the border countries (France, Switzerland, Austria, and Slovenia) are increased proportionally, with a fixed proportion throughout the process called the splitting factor.
 
-Splitting factors are calculated based on NTC values by country defined in NTC annual file, and potentially replaced or shifted based on elements from NTC reduction file. For each country, the splitting factor is calculated as follow.
+Splitting factors are calculated based on NTC values by country defined in the NTC annual file, and potentially replaced or shifted based on elements from the NTC reduction file. For each country, the splitting factor is calculated as follows:
 
 $$SF_{init}(\textrm{country}) = \frac{NTC_{ref}(\textrm{country})}{\sum_{c \in \textrm{countries}}{NTC_{ref}(\textrm{country})}}$$
 
-However, the existence of merchant lines with fix contractual flows on some borders makes that this definition of splitting factors must be adapted to remove from the reference NTC the flows on merchant lines. This gives the following definition for the reduced splitting factors.
+However, the existence of merchant lines with fixed contractual flows on some borders requires that this definition of splitting factors be adapted to remove the flows on merchant lines from the reference NTC. This gives the following definition for the reduced splitting factors:
 
 $$SF_{reduced}(\textrm{country}) = \frac{NTC_{ref}(\textrm{country})-P_\textrm{merchant line}(\textrm{country})}{\sum_{c \in \textrm{countries}}{\left( NTC_{ref}(\textrm{c}) - P_\textrm{merchant line}(c)\right)}}$$
 
 > **?** Open questions:
-> - Why aren't splitting factors defined in NTC annual used ?
+> - Why aren't the splitting factors defined in the NTC annual file used?
 
 ### Modified CGM export to MinIO
-The initial UCTE network file that has been imported from CGM input file has been modified by the action of some of the previous pre-processing steps. It is this modified CGM that must be used as network object during the entire capacity calculation process.
+The initial UCTE network file that has been imported from the CGM input file is modified by several pre-processing steps. This modified CGM must be used as the network object throughout the entire capacity calculation process.
 
-The modified network is exported in XIIDM format to be shared by GridCapa micro-services. It is saved as an artefact of the task on MinIO at path **CSE/IMPORT_EC/\<process_type\>/\<year\>/\<month\>/\<day\>/\<hour\>_\<minute\>/ARTIFACTS/network_pre_processed.xiidm** of MinIO.
+The modified network is exported in XIIDM format to be shared by GridCapa microservices. It is saved as an artifact of the task on MinIO at the path **CSE/IMPORT_EC/\<process_type\>/\<year\>/\<month\>/\<day\>/\<hour\>_\<minute\>/ARTIFACTS/network_pre_processed.xiidm**.
 
 ## Initial shift to previous NTC
-The initial shift is an operation before the dichotomy process that aims to upgrade the input network from vulcanus exchange level to NTC level.
+The initial shift is an operation performed before the dichotomy process that aims to upgrade the input network from the Vulcanus exchange level to the NTC level.
 
 ### Initial NTC retrieval
 
-The following notation will be used for the NTC values defined in the different NTC file inputs :
-- The NTC value defined for country c in NTC annual file is noted $NTC_{annual}(c)$
-- The NTC value defined for country c in NTC red file is noted $NTC_{red}(c)$
-- The NTC value defined for country c in NTC2 file is noted $NTC_2(c)$
+The following notation will be used for the NTC values defined in the different NTC file inputs:
+- The NTC value defined for country c in the NTC annual file is denoted as $NTC_{annual}(c)$
+- The NTC value defined for country c in the NTC red file is denoted as $NTC_{red}(c)$
+- The NTC value defined for country c in the NTC2 file is denoted as $NTC_2(c)$
 
 For France, Switzerland, Austria, and Slovenia, the initial NTC for the calculation $NTC(c)$ is retrieved as follows:
-- **For D2CC**,
-  - $NTC(c) = NTC_{red}(c)$ if $NTC_{red}(c)$ available and of absolute type
-  - $NTC(c) = NTC_{annual}(c) + NTC_{red}(c)$ if $NTC_{red}(c)$ available and of relative type
+- **For D2CC**:
+  - $NTC(c) = NTC_{red}(c)$ if $NTC_{red}(c)$ is available and of absolute type
+  - $NTC(c) = NTC_{annual}(c) + NTC_{red}(c)$ if $NTC_{red}(c)$ is available and of relative type
   - $NTC(c) = NTC_{annual}(c)$ otherwise
-- **For IDCC**,
-  - $NTC(c) = NTC_2(c)$ if $NTC_2(c)$ available
-  - $NTC(c) = NTC_{red}(c)$ if $NTC_{red}(c)$ available and of absolute type
-  - $NTC(c) = NTC_{annual}(c) + NTC_{red}(c)$ if $NTC_{red}(c)$ available and of relative type
+- **For IDCC**:
+  - $NTC(c) = NTC_2(c)$ if $NTC_2(c)$ is available
+  - $NTC(c) = NTC_{red}(c)$ if $NTC_{red}(c)$ is available and of absolute type
+  - $NTC(c) = NTC_{annual}(c) + NTC_{red}(c)$ if $NTC_{red}(c)$ is available and of relative type
   - $NTC(c) = NTC_{annual}(c)$ otherwise
 
-For Italy, the initial NTC for the calculation $NTC(IT)$ is retrieved as follows :
+For Italy, the initial NTC for the calculation $NTC(IT)$ is retrieved as follows:
 
 $NTC(IT) = - (NTC(FR) + NTC(CH) + NTC(AT) + NTC(SL))$
 
-### Flows on non modelled lines retrieval
+### Flows on non-modelled lines retrieval
 
-The following notation will be used for the non modelled lines flow values defined in the different NTC file inputs :
-- The flow value defined for country c in NTC annual file is noted $P_\textrm{nml annual}(c) = \sum_{nml}{P_{fixed}(c)}$ 
-- The flow value defined for country c in NTC red file is noted $P_\textrm{nml red}(c) = \sum_{nml}{P_{fixed}(c)}$
+The following notation will be used for the non-modelled lines flow values defined in the different NTC file inputs:
+- The flow value defined for country c in the NTC annual file is denoted as $P_\textrm{nml annual}(c) = \sum_{nml}{P_{fixed}(c)}$ 
+- The flow value defined for country c in the NTC red file is denoted as $P_\textrm{nml red}(c) = \sum_{nml}{P_{fixed}(c)}$
 
-
-They correspond to the fixed flows values of special-lines with the attribute “modelized” set to false in those input files. 
-- $P_\textrm{nml}(c) = P_\textrm{nml red}(c)$ if $P_\textrm{nml red}(c)$ available and of absolute type 
-- $P_\textrm{nml}(c) = P_\textrm{nml annual}(c) + P_\textrm{nml red}(c)$ if $P_\textrm{nml red}(c)$ available and of relative type 
+These values correspond to the fixed flow values of special lines with the attribute "modelized" set to false in those input files:
+- $P_\textrm{nml}(c) = P_\textrm{nml red}(c)$ if $P_\textrm{nml red}(c)$ is available and of absolute type 
+- $P_\textrm{nml}(c) = P_\textrm{nml annual}(c) + P_\textrm{nml red}(c)$ if $P_\textrm{nml red}(c)$ is available and of relative type 
 - $P_\textrm{nml}(c) = P_\textrm{nml annual}(c)$ otherwise
 
 ### Shift
 
-The initial shift uses each country GLSK and applies a one time shift with following volumes, for each country :
+The initial shift uses each country's GLSK and applies a one-time shift with the following volumes for each country:
 
 $\Delta_p(c) = NTC(c) - NTC_{ref}(c) - P_\textrm{nml}(c)$
 
-If any generator or load in the GLSK is disconnected, it will be automatically connected. The shift is iterative, i.e. it will not necessarily respect initial shifting factors if any of its blocks is saturated earlier than others.
+If any generator or load in the GLSK is disconnected, it will be automatically connected. The shift is iterative, meaning it will not necessarily respect the initial shifting factors if any of its blocks becomes saturated earlier than others.
 
 ### GLSK limitation
 
-In case of GLSK limitation, there are two possibilities.
+In case of GLSK limitation, there are two possibilities:
 
-If GLSK limitation is reached on Italy, all other shift values are amended proportionally to the reachable shift on Italy (aim i to keep same shift proportions on all  other countries)
+If GLSK limitation is reached on Italy, all other shift values are amended proportionally to the reachable shift on Italy (the aim is to maintain the same shift proportions across all other countries).
 
-If we note $\Delta P_{max}(IT)$ the maximum available shift on the GLSK, the new shifts $\Delta P'(c)$ for all countries are defined as follow. 
+If we denote $\Delta P_{max}(IT)$ as the maximum available shift on the GLSK, the new shifts $\Delta P'(c)$ for all countries are defined as follows: 
 - $\Delta P'(IT) = \Delta P_{max}(IT)$
 - $\Delta P'(c) = \Delta P(c) * \Delta P_{max}(IT) / \Delta P(IT)$ for $c$ in [FR, CH, AT, SL]
 
-If GLSK limitation is on any other country a simple warning log is emitted.
+If GLSK limitation occurs on any other country, a simple warning log is emitted.
 
 > **?** Open questions:
-> - In case of GLSK limitation on other country, it will create a sum of shifts which is not 0, though implying that part of this unequilibrium will be fixed by loadflow compensation. 
->   - The issue was known as described in this page GLSK limitations :
+> - In case of GLSK limitation on another country, it will create a sum of shifts which is not 0, implying that part of this imbalance will be fixed by loadflow compensation. 
+>   - The issue was known as described in this page on GLSK limitations:
       "On the other hand, if the limiting country is any of the following: Switzerland, France, Slovenia, or Austria, tests are currently being conducted by coreso (as of 1st June 2023) to clarify the behavior. However, it is possible that the delta on NIB loads will be automatically balanced using specific LF (Load Flow) parameters. This aspect is still under development and will be updated once the requirements become clearer."
->   - In case of GLSK limitation in Italy, it seems that orphan network variant aren't cleared in the process. To be analysed.
+>   - In case of GLSK limitation in Italy, it seems that orphan network variants aren't cleared in the process. This needs to be analyzed further.
 
-### Loadflow / divergence
+### Loadflow / Divergence
 
-In case of loadflow divergence (before or after shift), process is considered as failed.
+In case of loadflow divergence (either before or after shift), the process is considered failed.
 
-### Initial CGM export to MinIO
+### Initial CGM Export to MinIO
 
-The initial CGM network file output is the result of initial shift to reference NTC.
+The initial CGM network file output is the result of the initial shift to reference NTC.
 
-- **For D2CC**, it is exported in UCTE format to be retrievable through GridCapa UI as an output. It can also be retrieved as an output of the task on MinIO at path **CSE/IMPORT_EC/D2CC/\<year\>/\<month\>/\<day\>/\<hour\>_\<minute\>/OUTPUTS/\<year\>\<month\>\<day\>_\<hour\>\<minute\>_2D\<dayOfWeek\>_CO_CSE1.uct** of MinIO.
-- **For IDCC**, it is exported in UCTE format to be retrievable through GridCapa UI as an output. It can also be retrieved as an output of the task on MinIO at path **CSE/IMPORT_EC/IDCC/\<year\>/\<month\>/\<day\>/\<hour\>_\<minute\>/OUTPUTS/\<year\>\<month\>\<day\>_\<hour\>\<minute\>_\<generationHour\>\<dayOfWeek\>_Initial_CSE1.uct** of MinIO.
+- **For D2CC**, it is exported in UCTE format to be retrievable through the GridCapa UI as an output. It can also be retrieved as an output of the task on MinIO at the path **CSE/IMPORT_EC/D2CC/\<year\>/\<month\>/\<day\>/\<hour\>_\<minute\>/OUTPUTS/\<year\>\<month\>\<day\>_\<hour\>\<minute\>_2D\<dayOfWeek\>_CO_CSE1.uct**.
+- **For IDCC**, it is exported in UCTE format to be retrievable through the GridCapa UI as an output. It can also be retrieved as an output of the task on MinIO at the path **CSE/IMPORT_EC/IDCC/\<year\>/\<month\>/\<day\>/\<hour\>_\<minute\>/OUTPUTS/\<year\>\<month\>\<day\>_\<hour\>\<minute\>_\<generationHour\>\<dayOfWeek\>_Initial_CSE1.uct**.
 
 ## Dichotomy
 ### Initial step
@@ -180,34 +179,34 @@ The initial CGM network file output is the result of initial shift to reference 
 ### Step update strategy
 ## Output data postprocessing
 ### CRAC/CGM alignment rollback
-When dichotomy ends successfully, The final network file with activated preventive remedial actions is exported as an output of the process.
+When the dichotomy ends successfully, the final network file with activated preventive remedial actions is exported as an output of the process.
 
-In order to remove fictive nodes added during busbar change remedial actions pre processing, a post processing is applied that remove fictive nodes and switch and move associated branch on correct real node. 
+To remove fictive nodes added during busbar change remedial actions preprocessing, a post-processing step is applied that removes fictive nodes, switches, and moves associated branches to the correct real nodes. 
 
 ### Shifted CGM export
-The shifted CGM network file output is the final network file with activated preventive remedial actions on last secure step of the dichotomy.
+The shifted CGM network file output is the final network file with activated preventive remedial actions from the last secure step of the dichotomy.
 
-- **For D2CC**, it is exported in UCTE format to be retrievable through GridCapa UI as an output. It can also be retrieved as an output of the task on MinIO at path **CSE/IMPORT_EC/D2CC/\<year\>/\<month\>/\<day\>/\<hour\>_\<minute\>/OUTPUTS/\<year\>\<month\>\<day\>_\<hour\>\<minute\>_2D\<dayOfWeek\>_CO_Final_CSE1.uct** of MinIO.
-- **For IDCC**, it is exported in UCTE format to be retrievable through GridCapa UI as an output. It can also be retrieved as an output of the task on MinIO at path **CSE/IMPORT_EC/IDCC/\<year\>/\<month\>/\<day\>/\<hour\>_\<minute\>/OUTPUTS/\<year\>\<month\>\<day\>_\<hour\>\<minute\>_\<generationHour\>\<dayOfWeek\>_CSE1.uct** of MinIO.
+- **For D2CC**, it is exported in UCTE format to be retrievable through the GridCapa UI as an output. It can also be retrieved as an output of the task on MinIO at the path **CSE/IMPORT_EC/D2CC/\<year\>/\<month\>/\<day\>/\<hour\>_\<minute\>/OUTPUTS/\<year\>\<month\>\<day\>_\<hour\>\<minute\>_2D\<dayOfWeek\>_CO_Final_CSE1.uct**.
+- **For IDCC**, it is exported in UCTE format to be retrievable through the GridCapa UI as an output. It can also be retrieved as an output of the task on MinIO at the path **CSE/IMPORT_EC/IDCC/\<year\>/\<month\>/\<day\>/\<hour\>_\<minute\>/OUTPUTS/\<year\>\<month\>\<day\>_\<hour\>\<minute\>_\<generationHour\>\<dayOfWeek\>_CSE1.uct**.
 
-### TTC res export
+### TTC Res Export
 
 #### In case of process success
 
 The TTC res output is an XML file that contains the detailed results of the process including:
-- calculated TTC and MNII 
-- limiting CNEC 
-- remedial actions selected (preventive and curative), 
-- flows calculated on CNECs in the different state of the chronology (preventive, after outage, after curative), 
-- exchange values on each borders 
-- actual splitting factors
+- Calculated TTC and MNII 
+- Limiting CNEC 
+- Remedial actions selected (preventive and curative)
+- Flows calculated on CNECs in the different states of the chronology (preventive, after outage, after curative)
+- Exchange values on each border
+- Actual splitting factors
 
-**For D2CC**, it is exported to be retrievable through GridCapa UI as an output. It can also be retrieved as an output of the task on MinIO at path **CSE/IMPORT_EC/D2CC/\<year\>/\<month\>/\<day\>/\<hour\>_\<minute\>/OUTPUTS/TTC_Calculation_\<year\>\<month\>\<day\>_\<hour\>\<minute\>_2D0_CO_Final_CSE1.xml* of MinIO.
-**For IDCC**, it is exported to be retrievable through GridCapa UI as an output. It can also be retrieved as an output of the task on MinIO at path **CSE/IMPORT_EC/IDCC/\<year\>/\<month\>/\<day\>/\<hour\>_\<minute\>/OUTPUTS/\<year\>\<month\>\<day\>_\<hour\>\<minute\>_XBID2_TTCRes_CSE1.xml** of MinIO.
+**For D2CC**, it is exported to be retrievable through the GridCapa UI as an output. It can also be retrieved as an output of the task on MinIO at the path **CSE/IMPORT_EC/D2CC/\<year\>/\<month\>/\<day\>/\<hour\>_\<minute\>/OUTPUTS/TTC_Calculation_\<year\>\<month\>\<day\>_\<hour\>\<minute\>_2D0_CO_Final_CSE1.xml**.
+**For IDCC**, it is exported to be retrievable through the GridCapa UI as an output. It can also be retrieved as an output of the task on MinIO at the path **CSE/IMPORT_EC/IDCC/\<year\>/\<month\>/\<day\>/\<hour\>_\<minute\>/OUTPUTS/\<year\>\<month\>\<day\>_\<hour\>\<minute\>_XBID2_TTCRes_CSE1.xml**.
 
 #### In case of failure
 
-In case of failure of the process, a specific TTC res output is generated including some details about the reason of the failure.
+In case of process failure, a specific TTC res output is generated that includes details about the reason for the failure.
 
 ```xml
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
@@ -243,11 +242,11 @@ In case of failure of the process, a specific TTC res output is generated includ
 </Timestamp>
 ```
 
-Reason element can change depending on the kind of failure that may occur:
-- In case no secure TTC is found (i.e. all exchanges values are unsecure), reason code is "A98" and reason text "No secure TTC found"
-- In case any RAO failure, reason code is "A93" and reason text "IT issues on CE side"
-- In case of loadflow divergence during initial shift, reason code is "A42" and reason text "Load flow divergence during calculation"
-- In case of interruption, reason code is "B18" and reason text is empty
+The Reason element can change depending on the type of failure that occurs:
+- If no secure TTC is found (i.e., all exchange values are unsecure), the reason code is "A98" and the reason text is "No secure TTC found"
+- In case of any RAO failure, the reason code is "A93" and the reason text is "IT issues on CE side"
+- In case of loadflow divergence during initial shift, the reason code is "A42" and the reason text is "Load flow divergence during calculation"
+- In case of interruption, the reason code is "B18" and the reason text is empty
 
 > **?** Open questions:
-> - The TTC_res generation code base contains another failure case that is never used in the process code base : INVALID_FILES. Should we investigate it ? Remove it ?
+> - The TTC_res generation codebase contains another failure case that is never used in the process codebase: INVALID_FILES. Should we investigate it? Remove it?
