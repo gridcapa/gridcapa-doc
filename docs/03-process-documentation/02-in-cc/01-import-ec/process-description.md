@@ -164,7 +164,7 @@ In case of loadflow divergence (before or after shift), process is considered as
 
 ### Initial CGM export to MinIO
 
-The initial CGM network file output is the result of initial shift to refernce NTC.
+The initial CGM network file output is the result of initial shift to reference NTC.
 
 - **For D2CC**, it is exported in UCTE format to be retrievable through GridCapa UI as an output. It can also be retrieved as an output of the task on MinIO at path **CSE/IMPORT_EC/D2CC/\<year\>/\<month\>/\<day\>/\<hour\>_\<minute\>/OUTPUTS/\<year\>\<month\>\<day\>_\<hour\>\<minute\>_2D\<dayOfWeek\>_CO_CSE1.uct** of MinIO.
 - **For IDCC**, it is exported in UCTE format to be retrievable through GridCapa UI as an output. It can also be retrieved as an output of the task on MinIO at path **CSE/IMPORT_EC/IDCC/\<year\>/\<month\>/\<day\>/\<hour\>_\<minute\>/OUTPUTS/\<year\>\<month\>\<day\>_\<hour\>\<minute\>_\<generationHour\>\<dayOfWeek\>_Initial_CSE1.uct** of MinIO.
