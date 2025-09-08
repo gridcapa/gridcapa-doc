@@ -7,7 +7,7 @@ sidebar_position: 1
 
 The **Italy North Capacity Calculation Region (CCR)** comprises Italy and its neighboring countries to the north, including Austria, France, Slovenia, and Switzerland.
 
-![IN CCR](/img/CSE.png)
+![IN CCR](/static/img/CSE.png)
 
 The Transmission System Operators (TSOs) involved—**Terna** (Italy), **RTE** (France), **APG** (Austria), **ELES** (Slovenia), and **Swissgrid** (Switzerland)—collaborate to determine the available cross-border transmission capacity, ensuring both market efficiency and grid security.
 

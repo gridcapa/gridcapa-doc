@@ -7,7 +7,7 @@ sidebar_position: 1
 
 The **CORE Capacity Calculation Region (CCR)** spans most of continental Europe and includes 16 Transmission System Operators (TSOs).
 
-![CORE CCR](/img/CORE.png)
+![CORE CCR](/static/img/CORE.png)
 
  It represents the largest CCR in Europe and plays a crucial role in ensuring the secure and efficient allocation of cross-border electricity capacity across central Europe.
 

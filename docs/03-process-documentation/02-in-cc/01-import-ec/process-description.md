@@ -25,7 +25,7 @@ The PiSA HVDC line is an HVDC interconnection between France and Italy composed 
 
 As the UCT format does not allow modeling such a device in the CGM, an equivalent model is used, consisting of three AC lines and two generators for each HVDC link.
 
-![PiSa equivalent model](/img/in-import-ec/pisaModel.png)
+![PiSa equivalent model](/static/img/in-import-ec/pisaModel.png)
 
 Each HVDC link can be operated in two modes:
 - Fixed set point: all AC lines are disconnected, and the generators are configured with a power set point equal to the target flow of the link (each side of the HVDC must have approximately opposite target flows, with signs depending on the direction of flow at the border)
@@ -47,7 +47,7 @@ First, if the destination node does not exist in the initial network file, it is
 
 Then, to avoid having to change the network topology, a fictive node is created. This allows the conversion of busbar change remedial actions into sets of switch opening/closing remedial actions.
 
-![Topological RAs preprocessing](/img/in-import-ec/topologicalRAsPreprocessing.png)
+![Topological RAs preprocessing](/static/img/in-import-ec/topologicalRAsPreprocessing.png)
 
 These modifications are saved so that these fictive nodes can be removed before exporting the Final CGM.
 

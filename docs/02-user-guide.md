@@ -11,9 +11,9 @@ The GridCapa Human-Machine Interface (HMI) provides a user-friendly way to inter
 
 ## Process selection
 
-The list of all deployed processes is available through GridCapa UI. In practice each process has its dedicated web application with an associated URL. The link to all deployed process is accessible directly through GridCapa HMI, by clicking on button ![Process Selection Icon](/img/gridcapa-app/processSelectionIcon.png):
+The list of all deployed processes is available through GridCapa UI. In practice each process has its dedicated web application with an associated URL. The link to all deployed process is accessible directly through GridCapa HMI, by clicking on button ![Process Selection Icon](/static/img/gridcapa-app/processSelectionIcon.png):
 
-![GridCapa process selection](/img/gridcapa-app/processSelection.png)
+![GridCapa process selection](/static/img/gridcapa-app/processSelection.png)
 
 ## Display settings
 
@@ -21,14 +21,14 @@ The list of all deployed processes is available through GridCapa UI. In practice
 
 GridCapa supports both light and dark display modes to accommodate different user preferences and working environments.
 
-![Light mode](/img/gridcapa-app/lightMode.png)
-![Dark mode](/img/gridcapa-app/darkMode.png)
+![Light mode](/static/img/gridcapa-app/lightMode.png)
+![Dark mode](/static/img/gridcapa-app/darkMode.png)
 
 ### Change language
 
 GridCapa supports multiple languages. You can change the language through the language selection menu.
 
-![Language selection](/img/gridcapa-app/languageSelection.png)
+![Language selection](/static/img/gridcapa-app/languageSelection.png)
 
 ## Task status visualization
 
@@ -38,7 +38,7 @@ GridCapa lists tasks status and details in three different views:
 - Global view
 
 ### Business date view
-![GridCapa business date view](/img/gridcapa-app/businessDateViewRunTs.png)
+![GridCapa business date view](/static/img/gridcapa-app/businessDateViewRunTs.png)
 
 Business date view lists all the potential tasks for one business date. Its content depends on the process configuration (some have 24 tasks per day, whereas some have less). It is the default view of GridCapa.
 
@@ -50,7 +50,7 @@ This view allows:
 - The run of all tasks for a given date
 
 ### Timestamp view
-![GridCapa timestamp date view](/img/gridcapa-app/timestampViewStatusTab.png)
+![GridCapa timestamp date view](/static/img/gridcapa-app/timestampViewStatusTab.png)
 
 Timestamp view gives detailed information on a single task, defined by its date and time.
 
@@ -61,7 +61,7 @@ This view allows:
 - Download of input/output files
 
 ### Global view
-![GridCapa global view](/img/gridcapa-app/globalView.png)
+![GridCapa global view](/static/img/gridcapa-app/globalView.png)
 
 Global view lists all running and pending tasks for a given process.
 
@@ -123,9 +123,9 @@ Input files can be automatically imported from FTP or SFTP source to feed GridCa
 However, GridCapa UI also provides manual input upload, both in timestamp view and business date view.
 
 #### Timestamp view
-![Input file upload in timestamp view](/img/gridcapa-app/inputUploadTimestampView.png)
+![Input file upload in timestamp view](/static/img/gridcapa-app/inputUploadTimestampView.png)
 
-Click on the upload button ![Upload icon](/img/gridcapa-app/inputUploadIcon.png) to upload a file.
+Click on the upload button ![Upload icon](/static/img/gridcapa-app/inputUploadIcon.png) to upload a file.
 
 Note that there is no control on the type of file or date.
 
@@ -163,4 +163,4 @@ Parameters actually used in a given task. Can be modified before any manual run 
 
 GridCapa provides monitoring of the MinIO storage used for file management.
 
-![MinIO storage monitoring](/img/gridcapa-app/minioStorage.png)
+![MinIO storage monitoring](/static/img/gridcapa-app/minioStorage.png)

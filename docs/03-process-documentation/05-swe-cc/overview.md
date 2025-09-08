@@ -7,7 +7,7 @@ sidebar_position: 1
 
 The **South West Europe (SWE) Capacity Calculation Region (CCR)** encompasses France, Spain, and Portugal.
 
-![SWE CCR](/img/SWE.png)
+![SWE CCR](/static/img/SWE.png)
 
 Its capacity calculation process is a coordinated effort by the Transmission System Operators (TSOs) of these countries—**RTE**, **REE**, and **REN**—to determine the available cross-border transmission capacity for electricity markets while ensuring grid security.
 
