@@ -1,0 +1,5 @@
+name: Build Docusaurus
+
+on:
+  workflow_dispatch:
+
