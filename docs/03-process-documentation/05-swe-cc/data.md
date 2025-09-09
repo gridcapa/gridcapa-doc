@@ -8,8 +8,9 @@ sidebar_position: 2
 
 The CGM is in CGMES format. It follows specific file naming conventions that are used to automatically feed the platform when
 new files arrive on the FTP server.
-- The D2CC process is based on D2CF files that follow the file naming convention: **YYYYMMDDThhmmZ**_**2D**_**ttt**_**pp**_**vvv**.uct
-  -TODO The IDCC run 2 process is based on IDCF files that follow the file naming convention: **YYYYMMDD**_**hhmm**_**ttt**_UX**v**.uct
+- The D2CC process is based on D2CF files that follow the file naming convention: **YYYYMMDDThhmmZ**\_**2D**\_**ttt**\_**pp**\_**vvv**.xml
+- The IDCC 1st run process is based on DACF files that follow the file naming convention: **YYYYMMDDThhmmZ**\_**1D**\_**ttt**\_**pp**\_**vvv**.xml
+- The IDCC 2nd run process is based on IDCF files that follow the file naming convention: **YYYYMMDDThhmmZ**\_**xx**\_**ttt**\_**pp**\_**vvv**.xml
 
 Where:
 - **YYYY** is the timestamp year
@@ -18,11 +19,20 @@ Where:
 - **hh** is the timestamp hour
 - **mm** is the timestamp minutes (usually 30)
 - **T** and **Z** are fixed letters indicating that the time format is in UTC time
+- **xx** is the TODO
 - **ttt** is the reference to the TSO (RTEFRANCE, REE or REN)
 - **pp** is the CGMES profile (EQ, TP, SSH or SV)
 - **vvv** is the file version
 
-For a detailed description of the CGMES format, you can refer to the format specification published on [ENTSO-E website](https://www.entsoe.eu/data/cim/cim-for-grid-models-exchange/).
+Each CGMES profile for each country is zipped.
+
+Additionnally, two files named **YYYYMMDDThhmmZ**__**ENTSOE**\_**EQBD**\_**vvv**.xml and **YYYYMMDDThhmmZ**__**ENTSOE**\_**TPBD**\_**vvv**.xml 
+(with the conventions described above) are needed to complete the network description. These two files, called boundary sets, are uploaded less 
+frequently as they contain permanent definitions of the equipments and topology in the boundaries of the region.
+
+For a detailed description of the CGMES format, you can refer to the format specification published on [ENTSO-E website](https://www.entsoe.eu/data/cim/cim-for-grid-models-exchange/), 
+or further explanations on [PowSyBl website](https://powsybl.readthedocs.io/projects/powsybl-core/en/stable/grid_exchange_formats/cgmes/index.html),
+
 
 ### CRAC
 
