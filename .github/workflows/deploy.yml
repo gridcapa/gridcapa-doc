@@ -1,5 +1,44 @@
-name: Build Docusaurus
+name: Deploy to GitHub Pages
 
 on:
+  #  push:
+  #    branches:
+  #      - master
   workflow_dispatch:
 
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: setup-cd-deploy-workflow # For testing purpose only
+
+      - name: Set up Node & NPM
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: npm
+
+      - name: Init SSH
+        uses: webfactory/ssh-agent@v0.5.0
+        with:
+          ssh-private-key: ${{ secrets.GH_PAGES_DEPLOY }}
+
+      - name: Replace placeholder values with Github Pages compliant values in Docusaurus config
+        run: sed -i -e 's;http://PLACEHOLDER_URL/;https://gridcapa.github.io;g' -e 's;/PLACEHOLDER_BASE_URL/;/;g' docusaurus.config.ts
+
+      - name: Deploy to GitHub Pages
+        env:
+          USE_SSH: true
+        run: |
+          git config --global user.email "vincent.bochet@rte-france.com"
+          git config --global user.name "vbochetRTE"
+          npm ci --frozen-lockfile
+          npm run deploy
