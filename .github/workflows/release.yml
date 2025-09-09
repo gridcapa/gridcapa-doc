@@ -2,4 +2,83 @@ name: Release Gridcapa documentation
 
 on:
   workflow_dispatch:
+    inputs:
+      releaseVersion:
+        description: 'Release version'
+        required: true
+      nextVersion:
+        description: 'Next version'
+        required: true
 
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/master' || startsWith(github.ref_name, 'hotfix')
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Node & NPM
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: npm
+
+      - name: Change version to release version
+        uses: reedyuk/npm-version@1.1.1
+        with:
+          version: ${{ github.event.inputs.releaseVersion }}
+
+      - name: Install dependencies
+        run: npm ci --frozen-lockfile
+
+      - name: Build website
+        run: npm run build
+
+      - name: Commit and tag release version
+        uses: stefanzweifel/git-auto-commit-action@master
+        with:
+          branch: release-${{ github.event.inputs.releaseVersion }}
+          create_branch: true
+          commit_message: Prepare release ${{ github.event.inputs.releaseVersion }}
+          tagging_message: ${{ github.event.inputs.releaseVersion }}
+
+      - name: Build and publish Docker image
+        uses: elgohr/Publish-Docker-Github-Action@v5
+        with:
+          name: farao/gridcapa-doc
+          username: farao
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          tags: ${{ github.event.inputs.releaseVersion }}
+
+      - name: Change version to next version
+        uses: reedyuk/npm-version@1.1.1
+        with:
+          version: ${{ github.event.inputs.nextVersion }}
+
+      - name: Commit next version
+        uses: stefanzweifel/git-auto-commit-action@master
+        with:
+          branch: next-release-${{ github.event.inputs.nextVersion }}
+          create_branch: true
+          commit_message: Prepare next release ${{ github.event.inputs.nextVersion }}
+          skip_fetch: true
+          skip_checkout: true
+
+      - name: Merge automatically into source branch
+        uses: devmasx/merge-branch@master
+        with:
+          type: now
+          from_branch: next-release-${{ github.event.inputs.nextVersion }}
+          target_branch: ${{ github.ref_name }}
+          message: Automatic merge after release ${{ github.event.inputs.releaseVersion }}
+          github_token: ${{ secrets.REPO_ACCESS_TOKEN }}
+
+      - name: Delete merged branch
+        uses: dawidd6/action-delete-branch@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branches: next-release-${{ github.event.inputs.nextVersion }}
