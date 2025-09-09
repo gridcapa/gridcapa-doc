@@ -1,0 +1,5 @@
+name: Release Gridcapa documentation
+
+on:
+  workflow_dispatch:
+
