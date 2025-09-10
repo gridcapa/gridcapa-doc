@@ -82,3 +82,9 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branches: next-release-${{ github.event.inputs.nextVersion }}
+
+      - name: Delete release branch
+        uses: dawidd6/action-delete-branch@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branches: release-${{ github.event.inputs.releaseVersion }}
