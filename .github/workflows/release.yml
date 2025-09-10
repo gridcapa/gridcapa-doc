@@ -57,7 +57,7 @@ jobs:
       - name: Change version to next version
         uses: reedyuk/npm-version@1.1.1
         with:
-          version: ${{ github.event.inputs.nextVersion }}
+          version: ${{ github.event.inputs.nextVersion }}-snapshot.0
 
       - name: Commit next version
         uses: stefanzweifel/git-auto-commit-action@master
