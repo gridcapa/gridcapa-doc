@@ -1,6 +1,6 @@
 {
   "name": "gridcapa-docs-docusaurus",
-  "version": "0.3.0",
+  "version": "0.3.0-snapshot.0",
   "private": true,
   "scripts": {
     "docusaurus": "docusaurus",
