@@ -16,10 +16,11 @@ const config: Config = {
   // Set the /<baseUrl>/ pathname under which your site is served
   baseUrl: '/PLACEHOLDER_BASE_URL/',
 
-  // GitHub pages deployment config.
-  // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'farao-community', // Usually your GitHub org/user name.
-  projectName: 'gridcapa-docs', // Usually your repo name.
+  // GitHub pages deployment config
+  organizationName: 'gridcapa', // GitHub organization that owns the deployment repository
+  projectName: 'gridcapa.github.io', // Name of the deployment repository
+  deploymentBranch: 'master', // Name of the branch used for Github Pages deployment
+  trailingSlash: false,
 
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
