@@ -75,7 +75,7 @@ const config: Config = {
           label: 'Documentation',
         },
         {
-          href: 'https://github.com/farao-community/gridcapa-docs',
+          href: 'https://github.com/gridcapa/gridcapa-doc',
           label: 'GitHub',
           position: 'right',
         },
