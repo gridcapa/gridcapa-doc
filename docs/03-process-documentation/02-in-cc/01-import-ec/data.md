@@ -25,10 +25,8 @@ For a detailed description of the UCTE-DEF format, you can refer to the [format 
 
 ### CRAC
 
-**TODO**
-
-To be added:
-- Description of the format 
+**TODO** To be added
+- Description of the format
 - N-2 (Following the blackout in Italy in 2003, Terna's risk management requires systematic monitoring of N-2 contingencies on common support under favorable conditions.)
 
 The merged CRAC file must be named as follows: **YYYYMMDD_hhmm_2DX_CO_CRAC_CSEW.xml**
@@ -213,7 +211,8 @@ The NTC2 files are only available for the IDCC process, as they contain D-2 data
 
 The files must be named according to the following format: **NTC2_YYYYMMDD_2DX_PP-ITZ.xml** (where X is the day of the week and PP is the name of the control area, for instance CH). These files are contained in a folder named **22V-TERNA-ECPPRG_10V-RRRRRRRRRRRR_CCC-NTC2_YYYYMMDDVKK** (where RRRRRRRRRRRR is a code for the control area, such as SWISS-ECP-P7, and KK is the version number).
 
-TODO: Que faire de cette info ? Low consumption days ? Ce sont des journées partagées en 4 tranches horaires, durant lesquelles la capacité d’import italien est fortement limitée pour des contraintes internes de tensions hautes et de stabilité en Italie. Cela se produit lorsqu’une faible consommation est combinée à une importante production renouvelable. L’import est ainsi limité afin de démarrer des groupes thermiques permettant de résoudre les contraintes en question. Autant que possible les consignations impactantees sont placées sur des jours de faible consommation dans le but de limiter l’impact sur la capacité.
+**TODO** Put this somewhere else:
+- Low-consumption days to be described here? They are days split in 4 intervals, with a strong limitation of the italian import, because of both a low consumption and a high renewable generation share. The import is limited to turn on thermal power stations that could solve the constraints. The planned maintenances impacting the interconnections are scheduled on such low-consumption days, to limit their impact on the available capacity.
 
 ### Target CH
 
@@ -232,7 +231,8 @@ The computation of the special line’s fixed flow:
 
 The file is named: YYYYMMDD_Targets_CH_*.xml.
 
-TODO: faire une section pour les special lines quelque part ailleurs ? (il y en a aussi un peu dans les NTC)
+**TODO** Put this somewhere else:
+- Create a separate section for the special lines somewhere else? (there is a part of it in the NTC subsection)
 
 ## Outputs
 
