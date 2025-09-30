@@ -118,7 +118,7 @@ For France, Switzerland, Austria, and Slovenia, the initial NTC for the calculat
 
 For Italy, the initial NTC for the calculation $NTC(IT)$ is retrieved as follows:
 
-$NTC(IT) = - (NTC(FR) + NTC(CH) + NTC(AT) + NTC(SL))$
+$NTC(IT) = - (NTC(FR) + NTC(CH) + NTC(AT) + NTC(SI))$
 
 ### Flows on non-modelled lines retrieval
 
@@ -147,9 +147,16 @@ If GLSK limitation is reached on Italy, all other shift values are amended propo
 
 If we denote $\Delta P_{max}(IT)$ as the maximum available shift on the GLSK, the new shifts $\Delta P'(c)$ for all countries are defined as follows: 
 - $\Delta P'(IT) = \Delta P_{max}(IT)$
-- $\Delta P'(c) = \Delta P(c) * \Delta P_{max}(IT) / \Delta P(IT)$ for $c$ in [FR, CH, AT, SL]
+- $\Delta P'(c) = \Delta P(c) * \Delta P_{max}(IT) / \Delta P(IT)$ for $c$ in [FR, CH, AT, SI]
 
 If GLSK limitation occurs on any other country, a simple warning log is emitted.
+
+The GLSK limitation applies only in IDCC. In D2CC, if the requested shift is larger than the available shift defined in GSK, the remaining shift is performed:
+
+- using LSK if defined,
+- using load adjustment over all load nodes of the country as during D2CF merging process if no LSK is defined.
+
+This applies both to the initial shift and the intermediate shifts in the D2CC process. 
 
 > **?** Open questions:
 > - In case of GLSK limitation on another country, it will create a sum of shifts which is not 0, implying that part of this imbalance will be fixed by loadflow compensation. 
