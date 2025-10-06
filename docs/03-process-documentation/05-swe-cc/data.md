@@ -1,13 +1,13 @@
 ---
 sidebar_position: 2
 ---
-# Process Data
+# Process data
 
 ## Inputs
 ### CGM
 
 The CGM is in CGMES format. It follows specific file naming conventions that are used to automatically feed the platform when
-new files arrive on the FTP server.
+new files appear on the FTP server.
 - The D2CC process is based on D2CF files that follow the file naming convention: **YYYYMMDDThhmmZ**\_**2D**\_**ttt**\_**pp**\_**vvv**.xml
 - The IDCC 1st run process is based on DACF files that follow the file naming convention: **YYYYMMDDThhmmZ**\_**1D**\_**ttt**\_**pp**\_**vvv**.xml
 - The IDCC 2nd run process is based on IDCF files that follow the file naming convention: **YYYYMMDDThhmmZ**\_**xx**\_**ttt**\_**pp**\_**vvv**.xml
@@ -19,14 +19,14 @@ Where:
 - **hh** is the timestamp hour
 - **mm** is the timestamp minutes (usually 30)
 - **T** and **Z** are fixed letters indicating that the time format is in UTC time
-- **xx** is the TODO
+- **xx** is the hour TODO
 - **ttt** is the reference to the TSO (RTEFRANCE, REE or REN)
 - **pp** is the CGMES profile (EQ, TP, SSH or SV)
 - **vvv** is the file version
 
 Each CGMES profile for each country is zipped.
 
-Additionnally, two files named **YYYYMMDDThhmmZ**__**ENTSOE**\_**EQBD**\_**vvv**.xml and **YYYYMMDDThhmmZ**__**ENTSOE**\_**TPBD**\_**vvv**.xml 
+Additionally, two files named **YYYYMMDDThhmmZ**__**ENTSOE**\_**EQBD**\_**vvv**.xml and **YYYYMMDDThhmmZ**__**ENTSOE**\_**TPBD**\_**vvv**.xml 
 (with the conventions described above) are needed to complete the network description. These two files, called boundary sets, are uploaded less 
 frequently as they contain permanent definitions of the equipments and topology in the boundaries of the region.
 
@@ -42,7 +42,9 @@ Where:
 - **YYYY** is the timestamp year
 - **MM** is the timestamp month
 - **DD** is the timestamp day in month
-- *ccc* is TODO
+- *ccc* is ???
+
+> **?** TODO: Check what ccc stands for
 
 The CRAC is in CIM format, described in the [related OpenRAO documentation](https://powsybl.readthedocs.io/projects/openrao/en/latest/input-data/crac/cim.html).
 
@@ -54,7 +56,9 @@ Where:
 - **YYYY** is the timestamp year
 - **MM** is the timestamp month
 - **DD** is the timestamp day in month
-- *ccc* is TODO
+- *ccc* is ???
+- 
+> **?** Check what ccc stands for
 
 The GLSK is in CIM format, described in the [related OpenRAO documentation](https://powsybl.readthedocs.io/projects/entsoe/en/v2.10.0/glsk/glsk-cim.html).
 
@@ -64,7 +68,11 @@ The GLSK is in CIM format, described in the [related OpenRAO documentation](http
 ##### Proportional
 
 TODO check, and copy from IN
-This GLSK type is defined with a _businessType_ B42 in a unique _SKBlock_TimeSeries_ (containing no reference to any generator). The _measurement_Unit.name_ used for these GLSKs is C62, meaning TODO
+This GLSK type is defined with a _businessType_ B42 in a unique _SKBlock_TimeSeries_ (containing no reference to any generator). The _measurement_Unit.name_ used for these GLSKs is C62, meaning ???
+
+> **?** TODO: Check what C62 stands for
+
+The full description of the GLSK CIM is available in the [related OpenRAO documentation](https://powsybl.readthedocs.io/projects/entsoe/en/v2.10.0/glsk/glsk-cim.html) and in [Generation and Load Shift Key document UML model and schema (entsoe.eu)](https://eepublicdownloads.entsoe.eu/clean-documents/EDI/Library/cim_based/schema/Generation_and_Load_Shift_Key_document_UML_model_and_schema_v2.3.pdf). 
 
 ##### Merit order GLSK: Generation nodes shift according to different merit order lists for up and down shifting
 
@@ -88,7 +96,8 @@ An important consideration with the merit order GLSK is that when a shift is per
 ##### French GSK
 
 The French GSK is defined as a proportional GSK block. It contains nodes referencing only the node name.
-TODO: proportional to?
+
+> **?** TODO: proportional to ?
 
 ##### Spanish GSK
 
@@ -102,7 +111,10 @@ The Portuguese GSK is defined as a merit order GSK.
 
 ### CGMs
 
-For each border and each direction, the CGM of the first unsecure exchange level is exported in CGMES format. (TODO: check if PRAs are applied)
+For each border and each direction, the CGM of the first unsecure exchange level is exported in CGMES format.
+
+> **?** TODO: check if PRAs are applied
+
 On demand, the CGM at the last secure exchange value can also be exported.
 
 ### CNE files
