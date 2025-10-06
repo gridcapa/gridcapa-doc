@@ -1,7 +1,7 @@
 ---
 sidebar_position: 2
 ---
-# Process Data
+# Process data
 
 ## Inputs
 ### CGM
