@@ -294,6 +294,30 @@ A remedial action can be available to solve any constraint in a given country. T
 
 Example : TODO
 
+```xml
+<?xml version="1.0"?>
+<Series>
+    <RemedialAction_Series>
+        <mRID>TSO_RA_22</mRID>
+        <name>Open Line AB</name>
+        <businessType>B59</businessType>
+        <applicationMode_MarketObjectStatus.status>A19</applicationMode_MarketObjectStatus.status>
+        <availability_MarketObjectStatus.status>A39</availability_MarketObjectStatus.status>
+        <RegisteredResource>
+            <mRID codingScheme="A02">sdhlvkjfd3498dfkj28937</mRID>
+            <name>LINE AB</name>
+            <pSRType.psrType>A02</pSRType.psrType>
+            <in_Domain.mRID codingScheme="A01">TSO_ID</in_Domain.mRID>
+            <out_Domain.mRID codingScheme="A01">TSO_ID</out_Domain.mRID>
+            <marketObjectStatus.status>A22</marketObjectStatus.status>
+        </RegisteredResource>
+        <Shared_Domain>
+            <mRID codingScheme="A01">TSO_ID</mRID>
+        </Shared_Domain>
+    </RemedialAction_Series>
+</Series>
+```
+
 ## Appendices
 
 ### How to monitor voltage at a substation
