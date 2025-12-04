@@ -19,10 +19,12 @@ Where:
 - **hh** is the timestamp hour
 - **mm** is the timestamp minutes (usually 30)
 - **T** and **Z** are fixed letters indicating that the time format is in UTC time
-- **xx** is the hour TODO
+- **xx** is the hour ???
 - **ttt** is the reference to the TSO (RTEFRANCE, REE or REN)
 - **pp** is the CGMES profile (EQ, TP, SSH or SV)
 - **vvv** is the file version
+
+> **?** TODO: Check what xx stands for
 
 Each CGMES profile for each country is zipped.
 
@@ -106,6 +108,32 @@ The Spanish GSK is defined as a merit order GSK.
 ##### Portuguese GSK
 
 The Portuguese GSK is defined as a merit order GSK.
+
+## Hardcoded data
+
+### CracCreationParameters
+
+Some data is hardcoded in a CracCreationParameters.json file, that is read during the process.
+This files contains the following information:
+- range actions groups, to define that the range actions on the HVDC should be aligned,
+- range action speeds, to simulate automatons in a realistic order,
+- timeseries mRIDs, to split the CRAC following the borders,
+- information for voltage monitoring: states, thresholds, contingency names and monitored network element IDs.
+- some parameters (RA usage limits per instant).
+
+For more detailed information, read the [related OpenRAO documentation](https://powsybl.readthedocs.io/projects/openrao/en/stable/input-data/crac/creation-parameters.html#cim-specific-parameters).
+
+### SwePreprocessorParameters
+
+The SwePreprocessorParameters.json file contains information for the creation of the HVDC line from the equivalent model:
+- ID and electrical data of the HVDC line,
+- data on the VSC stations to be created,
+- ID of the elements of the equivalent model (groups, loads and AC lines), 
+- some parameters.
+
+### Configmap
+
+The configmap contains the IDs of the PSTs that should be removed from the regulation. 
 
 ## Outputs
 

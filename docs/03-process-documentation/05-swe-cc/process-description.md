@@ -45,9 +45,9 @@ Then, for the given direction, the exchange value is modified through a balances
 
 ### Balances adjustment
 
-- Import of Glsk file:
-Conversion of the Glsk <TimeSeries> corresponding to the process timestamp to merit order scalable for ES and PT. For FR,the shift is done proportionally to all FR generators.
-The limits Pmin, Pmax of generators defined in the network are ignored in order to respect the resource capacity limitation mentioned in the Glsk timeseries.
+- Import of GLSK file:
+Conversion of the GLSK <TimeSeries> corresponding to the process timestamp to merit order scalable for ES and PT. For FR,the shift is done proportionally to all FR generators.
+The limits Pmin, Pmax of generators defined in the network are ignored in order to respect the resource capacity limitation mentioned in the GLSK timeseries.
 
 Computing initial SWE countries balance :
 Run a loadflow on the imported cgm (after pre-processing) and computing exchanges on borders ES - FR and ES - PT.
@@ -82,7 +82,7 @@ The CNECs are defined in the CRAC creation parameters, during the pre-processing
 
 Acceptable thresholds are:
 - Between 395kV and 430KV in preventive,
-- Between 380kV and 430 kV in curative.
+- Between 380kV and 430kV in curative.
 
 Voltage check is only run on FR->ES and ES->FR directions, at the end of the dichotomy, on the last secure network.
 
