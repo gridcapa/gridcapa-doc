@@ -18,7 +18,7 @@ The **CORE Capacity Calculation Region (CCR)** spans most of continental Europe 
 - **Critical Network Elements (CNECs)**: TSOs define Critical Network Elements with Contingencies (CNECs), which are monitored during the capacity calculation to ensure security constraints are respected. These are selected based on operational experience and regular analysis.
 
 - **Remedial Actions**: CORE includes coordinated **preventive** and **curative** remedial actions:
-  - *Preventive*: Implemented before real-time operations, such as topology changes or PST tap changes.
+  - *Preventive*: Implemented before real-time operations, such as topology changes are PST taps change.
   - *Curative*: Applied during real-time operations, in response to a contingency.
     These actions are coordinated among TSOs to increase available capacity and manage congestions.
 
