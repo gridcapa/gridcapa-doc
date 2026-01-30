@@ -193,8 +193,6 @@ The step update strategy is divided into two phases:
 
 The computation stops when the difference between the highest secure and the lowest unsecure exchange levels is lower or equal to 100 MW.
 
-> **?** TODO: lower or equal, or strictly lower?
-
 ## Output data postprocessing
 ### CRAC/CGM alignment rollback
 When the dichotomy ends successfully, the final network file with activated preventive remedial actions is exported as an output of the process.
