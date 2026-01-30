@@ -184,6 +184,15 @@ The initial CGM network file output is the result of the initial shift to refere
 #### Unsecure
 #### Divergence
 ### Step update strategy
+
+The step update strategy is divided into two phases:
+- while only unsecure exchange values are found, the next exchange value is the latest computed, decreased by 650 MW. While only secure values are found, the exchange value increases by 650 MW.
+- once at least one secure and one unsecure exchange value is found, a dichotomy is run: if the lowest unsecure exchange value computed so far is x MW and the highest secure exchange value is y MW, the next exchange value analysed is (x+y)/2.
+
+### Dichotomy precision
+
+The computation stops when the difference between the highest secure and the lowest unsecure exchange levels is lower or equal to 100 MW.
+
 ## Output data postprocessing
 ### CRAC/CGM alignment rollback
 When the dichotomy ends successfully, the final network file with activated preventive remedial actions is exported as an output of the process.

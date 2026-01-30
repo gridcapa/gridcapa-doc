@@ -1,7 +1,7 @@
 ---
 sidebar_position: 2
 ---
-# Process Data
+# Process data
 
 ## Inputs
 ### CGM
@@ -233,6 +233,19 @@ The file is named: YYYYMMDD_Targets_CH_*.xml.
 
 **TODO** Put this somewhere else:
 - Create a separate section for the special lines somewhere else? (there is a part of it in the NTC subsection)
+
+## Hardcoded data
+
+### CracCreationParameters
+
+The CracCreationParameters.json file contains the RA usage limits in curative for each TSO in the area.
+For more information, see the [OpenRAO documentation](https://powsybl.readthedocs.io/projects/openrao/en/stable/input-data/crac/creation-parameters.html#).
+
+### Configmap
+
+The configmap contains some data for particular network elements:
+- the references to the Mendrisio-Cagno merchant line in the input files,
+- the references to the PiSa HVDC line and associated remedial action in the input files.
 
 ## Outputs
 
