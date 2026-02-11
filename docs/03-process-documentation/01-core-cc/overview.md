@@ -38,4 +38,11 @@ The **Core Capacity Calculation Region (CCR)** spans most of continental Europe 
 
 The Core capacity calculation process complies with **EU Regulation 2015/1222** on Capacity Allocation and Congestion Management (CACM), contributing to the harmonized and integrated internal electricity market in Europe.
 
+### Timeline
+
+The table below shows the typical timing of the Core CC process (this timing is provided as an example of GridCapa task scheduling and may be adjusted as needed):
+
+| Process      | Time window                          | Launch mode | Number of timestamps              |
+|--------------|--------------------------------------|-------------|-----------------------------------|
+| Core CC NRAO | 21:00 - 00:00 (Europe/Brussels time) | Automatic   | 24 timestamps (00:30, ..., 23:30) |
 

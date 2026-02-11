@@ -28,12 +28,22 @@ is based on a flow-based market coupling. In this process, GridCapa only perform
 which goal is to enlarge the flow-based domain with the application of non-costly remedial actions. The NRAO is described 
 [here](https://www.entsoe.eu/bites/ccr-core/day-ahead/#fc22).
 
-Thus, the objective function of the NRAO is to maximise the smallest margin on the network at each step. Contrarily to the other 
-processes performed by GridCapa, the computation of the NRAO does not stop when all states are secured, but goes beyond to try to 
+Thus, the objective function of the NRAO is to maximise the smallest relative margin on the network at each step (MAX_MIN_RELATIVE_MARGIN).
+Contrarily to the other processes performed by GridCapa, the computation of the NRAO does not stop when all states are secured, but goes beyond to try to 
 improve the margins as much as possible. The computation is a single RAO on each timestamp, and no dichotomy is performed as the 
 goal to find the highest NTC on one specific border.
 
 The computation is performed in DC-mode.
+
+### Balancing
+
+The balancing logic in Core CC follows the compensation on all loads, so that the flows in the CGM are not distorted
+(due to different modelling of renewables between TSOs leading to overcompensation of losses in some hubs).
+
+To reach this objective, the input network of the NRAO is a DC balanced CGM (F139). The preventive remedial actions (PRAs) 
+selected by the NRAO are then applied on the AC balanced network (F119) for the export of the F304 document.
+
+if the DC CGM is not available, the NRAO will be performed on the AC CGM as fallback strategy.
 
 ### Loop-flows
 
@@ -42,10 +52,20 @@ The loop-flows are described in the [OpenRAO documentation](https://powsybl.read
 
 The loop-flows cannot be higher than the max between the initial loop-flow value and the percentage defined by the difference between 100 and the minRAMFactor defined in the F301 for each CNEC.
 
+The RAO with loop-flow computation requires the use of Generation and Load Shift Keys (GLSKs).
+
 ### MNECs
 
 Some network elements are defined as MNECs, described in the [OpenRAO documentation](https://powsybl.readthedocs.io/projects/openrao/en/latest/algorithms/castor/special-features/mnecs.html#mnecs).
 These particular network elements are not optimised but monitored: their margin must be kept positive or above its initial value, with a margin set to 53 MW.
+
+### PTDF computation 
+
+As the objective function of the NRAO is MAX_MIN_RELATIVE_MARGIN, the PTDFs (Power Transfer Distribution Factors) are computed.
+
+The PTDF computation also requires the use of Generation and Load Shift Keys (GLSKs).
+
+The boundaries taken into account in the PTDF computation are adapted to handle the Advanced Hybrid Coupling (AHC) hubs defined in the F327.
 
 ## Output data postprocessing
 
@@ -56,4 +76,4 @@ All information that can be aggregated (one remedial action applied on two conse
 
 ### Generation of F304 (Networks with PRAs)
 
-The preventive remedial actions (PRAs) selected by the NRAO are applied on the network exported for each timestamp. 
+The preventive remedial actions (PRAs) selected by the NRAO (either on the AC or on the DC network) are applied on the AC network (F119) exported for each timestamp. 
