@@ -51,7 +51,6 @@ For a detailed description of the F120 file, you can refer to the documentation:
 The F119 document is a zip containing the 24 networks in UCTE format and an xml header linking the networks to timestamps.
 The difference with the F119 file is that 
 
-
 > **?** Open questions:
 > What is the difference?
 
@@ -75,12 +74,20 @@ the [PowSyBl-ENTSOE documentation](https://powsybl.readthedocs.io/projects/entso
 
 ### Virtual hubs (F327)
 
-The F327 document is an xml file containing the virtual hubs, which are are one-node areas which should be considered as market areas when calculating loop-flows.
+The F327 document is an xml file containing the virtual hubs, which are one-node areas which should be considered as market areas when calculating loop-flows.
 
 For a detailed description of the F327 file, you can refer to the documentation:
 [OpenRAO documentation](https://powsybl.readthedocs.io/projects/openrao/en/latest/input-data/specific-input-data/virtual-hubs.html).
 
 ## Hardcoded data
+
+### RaoParameters
+
+The computations are based on parameters, described in the [OpenRAO documentation](https://powsybl.readthedocs.io/projects/openrao/en/latest/parameters.html).
+
+The values of the parameters for Core CC are defined in the [gridcapa-deployment configuration](https://github.com/farao-community/gridcapa-deployment/blob/master/configuration/core-cc-runner-itools-config.yml).
+Compared to this list, a few parameters might be modified during the computation, directly in the code.
+Others, if not defined, are set to the default values listed in the documentation.
 
 ### CracCreationParameters
 
