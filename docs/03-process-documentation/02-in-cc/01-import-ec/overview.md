@@ -12,4 +12,4 @@ The table below shows the typical timing of these processes (these timings are p
 |-------------------------|--------------------------------------|-------------|-----------------------------------------------------------------------|
 | IN Import EC D2CC       | 18:30 - 01:30 (Europe/Brussels time) | Manual      | 8 timestamps (00:30, 03:30, 07:30, 10:30, 13:30, 16:30, 19:30, 22:30) |
 | IN Import EC IDCC run 1 | N/A                                  | N/A         | Process on hold                                                       |
-| IN Import EC IDCC run 2 | 02:30 - 05:30 (Europe/Brussels time) | Manual      | 4 timestamps (13:30, 16:30, 19:30, 22:30)                             |
+| IN Import EC IDCC run 2 | 02:30 - 05:30 (Europe/Brussels time) | Automatic   | 4 timestamps (13:30, 16:30, 19:30, 22:30)                             |

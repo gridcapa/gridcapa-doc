@@ -113,7 +113,7 @@ const config: Config = {
           title: 'GridCapa process',
           items: [
             {
-              label: 'CORE Capacity Calculation',
+              label: 'Core Capacity Calculation',
               to: '/docs/process-documentation/core-cc/overview',
             },
             {

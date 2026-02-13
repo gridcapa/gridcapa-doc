@@ -3,21 +3,21 @@ sidebar_position: 1
 ---
 # Overview
 
-## CORE Capacity Calculation Process
+## Core Capacity Calculation Process
 
-The **CORE Capacity Calculation Region (CCR)** spans most of continental Europe and includes 16 Transmission System Operators (TSOs).
+The **Core Capacity Calculation Region (CCR)** spans most of continental Europe and includes 16 Transmission System Operators (TSOs).
 
-![CORE CCR](/img/CORE.png)
+![Core CCR](/img/CORE.png)
 
  It represents the largest CCR in Europe and plays a crucial role in ensuring the secure and efficient allocation of cross-border electricity capacity across central Europe.
 
 ### Key Features
 
-- **Methodology**: CORE uses a **flow-based capacity calculation approach**, which accounts for the physical realities of how electricity flows through the interconnected grid. This method enables a more efficient and accurate use of the transmission network compared to traditional border-based (NTC) methods.
+- **Methodology**: Core uses a **flow-based capacity calculation approach**, which accounts for the physical realities of how electricity flows through the interconnected grid. This method enables a more efficient and accurate use of the transmission network compared to traditional border-based (NTC) methods.
 
 - **Critical Network Elements (CNECs)**: TSOs define Critical Network Elements with Contingencies (CNECs), which are monitored during the capacity calculation to ensure security constraints are respected. These are selected based on operational experience and regular analysis.
 
-- **Remedial Actions**: CORE includes coordinated **preventive** and **curative** remedial actions:
+- **Remedial Actions**: Core includes coordinated **preventive** and **curative** remedial actions:
   - *Preventive*: Implemented before real-time operations, such as topology changes or PST tap changes.
   - *Curative*: Applied during real-time operations, in response to a contingency.
     These actions are coordinated among TSOs to increase available capacity and manage congestions.
@@ -36,6 +36,13 @@ The **CORE Capacity Calculation Region (CCR)** spans most of continental Europe 
 
 ### Regulatory Framework
 
-The CORE capacity calculation process complies with **EU Regulation 2015/1222** on Capacity Allocation and Congestion Management (CACM), contributing to the harmonized and integrated internal electricity market in Europe.
+The Core capacity calculation process complies with **EU Regulation 2015/1222** on Capacity Allocation and Congestion Management (CACM), contributing to the harmonized and integrated internal electricity market in Europe.
 
+### Timeline
+
+The table below shows the typical timing of the Core CC process (this timing is provided as an example of GridCapa task scheduling and may be adjusted as needed):
+
+| Process      | Time window                          | Launch mode | Number of timestamps              |
+|--------------|--------------------------------------|-------------|-----------------------------------|
+| Core CC NRAO | 21:00 - 00:00 (Europe/Brussels time) | Automatic   | 24 timestamps (00:30, ..., 23:30) |
 
