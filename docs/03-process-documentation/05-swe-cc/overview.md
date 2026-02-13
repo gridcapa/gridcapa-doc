@@ -18,7 +18,7 @@ Its capacity calculation process is a coordinated effort by the Transmission Sys
 - **Critical Network Elements (CNEs)**: TSOs identify and monitor CNEs that significantly influence cross-zonal power exchanges. These elements are selected based on a sensitivity analysis, which is updated at least annually.
 
 - **Remedial Actions**: Both **preventive** and **curative** remedial actions are considered. These include non-costly measures (e.g., topology changes, HVDC modulation) that can be used for solving flow constraints, voltage constraints, or even angle constraints.
-      Some automaton are also modeled that automatically use remedial actions in response to constraint on the grid.
+      Some automatons that automatically use remedial actions in response to constraint on the grid are also modeled.
       The list of applicable remedial actions is reviewed regularly to adapt to changing grid conditions.
 
 - **Generation and Load Shift Keys (GLSKs)**: Each TSO defines GLSKs based on their best forecast of market behavior, reflecting expected generation and load patterns.
@@ -33,4 +33,16 @@ Its capacity calculation process is a coordinated effort by the Transmission Sys
 ### Regulatory Framework
 
 The SWE capacity calculation methodology aligns with the **EU Regulation 2015/1222** on Capacity Allocation and Congestion Management (CACM), ensuring compliance with European electricity market integration objectives.
+
+
+### Timeline
+
+The table below shows the typical timing of the SWE processes (this timing is provided as an example of GridCapa task scheduling and may be adjusted as needed):
+
+| Process        | Time window                          | Launch mode | Number of timestamps                                    |
+|----------------|--------------------------------------|-------------|---------------------------------------------------------|
+| SWE D2CC       | 17:30 - 01:30 (Europe/Brussels time) | Manual      | 6 timestamps (02:30, 05:30, 09:30, 12:30, 15:30, 19:30) |
+| SWE IDCC run 1 | 17:30 - 20:30 (Europe/Brussels time) | Manual      | 6 timestamps (02:30, 05:30, 09:30, 12:30, 15:30, 19:30) |
+| SWE IDCC run 2 | 02:30 - 05:30 (Europe/Brussels time) | Manual      | 4 timestamps (09:30, 12:30, 15:30, 19:30)               |
+
 

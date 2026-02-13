@@ -3,7 +3,7 @@ sidebar_position: 1
 ---
 # Import EC
 
-The Import EC process is the main capacity calculation process aimed at determining the Maximum Northern Italian Import (MNII).
+The IN import EC process is the main capacity calculation process aimed at determining the Maximum Northern Italian Import (MNII).
 It is run both two days before real-time operations (D2CC) and the day before real-time operations (IDCC).
 
 The table below shows the typical timing of these processes (these timings are provided as an example of GridCapa task scheduling and may be adjusted as needed):
