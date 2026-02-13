@@ -34,3 +34,15 @@ Its capacity calculation process is a coordinated effort by the Transmission Sys
 
 The SWE capacity calculation methodology aligns with the **EU Regulation 2015/1222** on Capacity Allocation and Congestion Management (CACM), ensuring compliance with European electricity market integration objectives.
 
+
+### Timeline
+
+The table below shows the typical timing of the SWE processes (this timing is provided as an example of GridCapa task scheduling and may be adjusted as needed):
+
+| Process        | Time window                          | Launch mode | Number of timestamps                                    |
+|----------------|--------------------------------------|-------------|---------------------------------------------------------|
+| SWE D2CC       | 17:30 - 01:30 (Europe/Brussels time) | Manual      | 6 timestamps (02:30, 05:30, 09:30, 12:30, 15:30, 19:30) |
+| SWE IDCC run 1 | 17:30 - 20:30 (Europe/Brussels time) | Manual      | 6 timestamps (02:30, 05:30, 09:30, 12:30, 15:30, 19:30) |
+| SWE IDCC run 2 | 02:30 - 05:30 (Europe/Brussels time) | Manual      | 4 timestamps (09:30, 12:30, 15:30, 19:30)               |
+
+

@@ -100,6 +100,14 @@ The Portuguese GSK is defined as a merit order GSK.
 
 ## Hardcoded data
 
+### RaoParameters
+
+The computations are based on parameters, described in the [OpenRAO documentation](https://powsybl.readthedocs.io/projects/openrao/en/latest/parameters.html).
+
+The values of the parameters for the SWE processes are defined in the [gridcapa-deployment configuration](https://github.com/farao-community/gridcapa-deployment/blob/master/configuration/swe-runner-itools-config.yml).
+Compared to this list, a few parameters might be modified during the computation, directly in the code.
+Others, if not defined, are set to the default values listed in the documentation.
+
 ### CracCreationParameters
 
 Some data is hardcoded in a CracCreationParameters.json file, that is read during the process.

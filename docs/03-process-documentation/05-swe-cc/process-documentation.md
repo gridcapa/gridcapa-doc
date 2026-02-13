@@ -44,16 +44,82 @@ Then, for the given direction, the exchange value is modified through a balances
 
 ### Balances adjustment
 
-- Import of GLSK file:
-  Conversion of the GLSK <TimeSeries> corresponding to the process timestamp to merit order scalable for ES and PT. For FR,the shift is done proportionally to all FR generators.
-  The limits Pmin, Pmax of generators defined in the network are ignored in order to respect the resource capacity limitation mentioned in the GLSK timeseries.
+#### Import of GLSK file
 
-Computing initial SWE countries balance :
+Conversion of the GLSK TimeSeries corresponding to the process timestamp to merit order scalable for ES and PT. For FR,the shift is done proportionally to all FR generators.
+The limits Pmin, Pmax of generators defined in the network are ignored in order to respect the resource capacity limitation mentioned in the GLSK timeseries.
+
+#### Computing initial SWE countries balance
 Run a loadflow on the imported cgm (after pre-processing) and computing exchanges on borders ES - FR and ES - PT.
 
-TODO: https://gopro-collaboratif.rte-france.com/display/GRC/SWE+D2CC+documentation
+$$
+NP_{init}(PT) = - exchange_{ES-PT}
+$$
+$$
+NP_{init}(ES) = exchange_{ES-FR} + exchange_{ES-PT}
+$$
+$$
+NP_{init}(FR) = - exchange_{ES-FR}
+$$
 
-- compensation
+#### Calculation of target exchanges borders corresponding to the dichotomy step
+
+| Process/direction of dichotomy | ES_FR                                                                                      | ES_PT                                                                                        | FR_ES                                                                                                      | PT_ES                                                                                                        |
+|--------------------------------|--------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------------|
+| D2CC                           | $$TargetExchange_{ES-PT} = 0$$<br/>$$ TargetExchange_{ES-FR} = \mathbf{step}$$             | $$TargetExchange_{ES-PT} = 0$$<br/>$$TargetExchange_{ES-FR} = -\mathbf{step}$$               | $$TargetExchange_{ES-PT} = \mathbf{step}$$<br/>$$TargetExchange_{ES-FR} = 0$$                              | $$TargetExchange_{ES-PT} = -\mathbf{step}$$<br/>$$TargetExchange_{ES-FR} = 0$$                               |
+| IDCC                           | $$TargetExchange_{ES-PT} = -NP_{init}(PT)$$<br/>$$TargetExchange_{ES-FR} = \mathbf{step}$$ | $$TargetExchange_{ES-PT} = -NP_{init}(PT)$$<br/>$$TargetExchange_{ES-FR}  = -\mathbf{step}$$ | $$TargetExchange_{ES-PT} = \mathbf{step}$$<br/>$$TargetExchange_{ES-FR}  = NP_{init}(ES) + NP_{init}(PT)$$ | $$TargetExchange_{ES-PT} = -\mathbf{step}$$<br/>$$TargetExchange_{ES-FR}  =  NP_{init}(ES) + NP_{init}(PT)$$ |
+
+#### Calculation of shift to be applied in the first iteration for each country, corresponding to the dichotomy step
+
+
+| Process/direction of dichotomy | ES_FR                                                                                                                               | ES_PT                                                                                                                               | FR_ES                                                                                                                                                            | PT_ES                                                                                                                                                            |
+|--------------------------------|-------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| D2CC                           | $$Shift(PT) = -NP_{init}(PT)$$<br/>$$Shift(ES) = \mathbf{step} -NP_{init}(ES)$$<br/>$$Shift(FR) = -\mathbf{step} -NP_{init}(FR)$$   | $$Shift(PT) = -NP_{init}(PT)$$<br/>$$Shift(ES) = -\mathbf{step} -NP_{init}(ES)$$<br/>$$Shift(FR) = \mathbf{step} -NP_{init}(FR)$$   | $$Shift(PT) = -\mathbf{step} -NP_{init}(PT)$$<br/>$$Shift(ES) = \mathbf{step} -NP_{init}(ES)$$<br/>$$Shift(FR) = -NP_{init}(FR)$$                                | $$Shift(PT) = \mathbf{step} -NP_{init}(PT)$$<br/>$$Shift(ES) = \mathbf{step} -NP_{init}(ES)$$<br/>$$Shift(FR) = -NP_{init}(FR)$$                                 |
+| IDCC                           | $$Shift(PT) = 0$$<br/>$$Shift(ES) = \mathbf{step} -NP_{init}(ES)- NP_{init}(PT)$$<br/>$$Shift(FR) = -\mathbf{step} -NP_{init}(FR)$$ | $$Shift(PT) = 0$$<br/>$$Shift(ES) = -\mathbf{step} -NP_{init}(ES)- NP_{init}(PT)$$<br/>$$Shift(FR) = \mathbf{step} -NP_{init}(FR)$$ | $$Shift(PT) = -\mathbf{step} -NP_{init}(PT)$$<br/>$$Shift(ES) = \mathbf{step} + NP_{init}(PT)$$<br/>$$Shift(FR) = -NP_{init}(ES)- NP_{init}(PT) -NP_{init}(FR)$$ | $$Shift(PT) = \mathbf{step} -NP_{init}(PT)$$<br/>$$Shift(ES) = -\mathbf{step} + NP_{init}(PT)$$<br/>$$Shift(FR) = -NP_{init}(ES)- NP_{init}(PT) -NP_{init}(FR)$$ |
+
+
+####Applying shift for each country corresponding to the dichotomy step
+
+The shift is applied on the scalable list for each country respecting the limitation of each scalable from Glsk file.
+
+For ES and PT, if the asked shift is positive, the Up scalables will be used (flowDirection A01). Otherwise the Down scalables will be used instead (flowDirection A02).
+
+If the scalable is initially disconnected, it will be connected and shifted. Especially for ES and PT, some generators are connected to the main network by a transformer that are intially both disconnected. In this case, we will try to connect the transformer also to take into account the modification of the setpoint.
+If after connecting the transformer, the generator still disconnected from the main component, we rollback the intial setpoint to 0 and the initial connectivity state. In this way, the shift will be done to distributed to the following generators in the merit order list.
+
+#### Compensation of losses
+
+To compensate the losses on the network, the shift is iterative until respecting the tolerance for each border.  After each iteration, a loadflow is run to compute real borders exchanges and compare with target values (mismatch = target exchange - real exchange after shift). The tolerance for each border exchange are configurable for each dichotomy direction.
+
+The shift succeeds when target exchanges values are reached.
+
+#### GLSK limitation check
+
+After each iteration, if the asked variation for any country was not reached, the algorithm check if there is a Glsk limitation error for this country:
+
+- In case of asked variation on the country > 0: The shift difference (done variation  - asked variation ) will be < 0, we have Glsk limitation if the next asked value increase (i.e exchange mismatch < 0)
+- In case of asked variation on the country < 0: The shift difference (done variation  - asked variation ) will be > 0, we have Glsk limitation if the next asked value decrease (i.e exchange mismatch > 0)
+
+If no Glsk limitation error is thrown, the asked values by country for the next iteration will be updated with mismatch
+
+$$
+Shift(ES)_{iteration_2} = Shift(ES)_{iteration_1} + mismatch_{ES-PT} + mismatch_{ES-FR}
+$$
+In case of dichotomy direction ES-FR or FR-ES:
+$$
+Shift(FR)_{iteration_2} = Shift(FR)_{iteration_1} - mismatch_{ES-FR}
+$$
+In case of dichotomy direction ES-PT or PT-ES:
+$$
+Shift(PT)_{iteration_2} = Shift(PT)_{iteration_1} - mismatch_{ES-PT}
+$$
+
+#### After shift
+
+After shift succeeds, if the new setpoint of the generators are above the initial Pmin/Pmax, these values are adapted. 
+
+If the shift failed after maximum number of iteration (the number max of iteration is configurable), an error message will be raised "Balancing adjustment out of tolerances"  with the values of borders exchanges. In this case the step of dichotomy is considered as unsecure.
+
 
 ### RAO
 #### Secure
