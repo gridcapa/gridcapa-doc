@@ -176,22 +176,58 @@ The initial CGM network file output is the result of the initial shift to refere
 - **For IDCC**, it is exported in UCTE format to be retrievable through the GridCapa UI as an output. It can also be retrieved as an output of the task on MinIO at the path **CSE/IMPORT_EC/IDCC/\<year\>/\<month\>/\<day\>/\<hour\>_\<minute\>/OUTPUTS/\<year\>\<month\>\<day\>_\<hour\>\<minute\>_\<generationHour\>\<dayOfWeek\>_Initial_CSE1.uct**.
 
 ## Dichotomy
-### Initial step
+### Initial step (initial Italian import)
+
 ### Shift
+
+Between two dichotomy steps, a shift is performed to modify the Italian import level following the step update strategy defined below.
+
+
+
 ### GLSK limitation
+
+Similarly to the initial shift, the GLSK limitation applies also during the dichotomy process.
+
+
 ### RAO
+
+The RAO computation is run with CASTOR, a search-tree algorithm developed in OpenRAO. For more information, read the [documentation](https://powsybl.readthedocs.io/projects/openrao/en/stable/algorithms/castor.html).
+
+### Objective function
+
+A non-costly RAO is used in the dichotomy. The objective function is SECURE_FLOW, which means that the algorithm stops
+as soon as it finds a solution where the minimum margin is positive.
+
+For more detailed information, read the [related OpenRAO documentation](https://powsybl.readthedocs.io/projects/openrao/en/stable/parameters/business-parameters.html#objective-function-parameters).
+
 #### Secure
+If the RAO finds at least one set of remedial actions in basecase and after each contingency for which all monitored elements are secure, the exchange value is considered as secure.
+
 #### Unsecure
+If the RAO is unable to find a set of remedial actions for which at least one state (basecase or after contingency) is secure, the exchange level is unsecure.
+
 #### Divergence
+In some situations, the loadflow or the sensitivity computation used inside the RAO diverges.
+This is due to difficult electrical situations, possibly linked to the network model or to big unbalances linked to the flow distribution after shift or the simulation of a contingency.
+
+Inside the algorithm, the cause of the failure of the computation is due to unrealistic voltage values (UNREALISTIC_STATE in the solver status) or to the maximum number of iterations reached in the Newton-Raphson algorithm (MAX_ITERATION_REACHED in solver status) or in the outerloop (UNSTABLE outerloop status).
+
+In case of divergence, the step is considered as unsecure.
+
+In some cases, the sensitivity computation fails only partially (after a given contingency simulation). In this case, even
+though the RAO finds secure states after basecase and all the other contingencies, it cannot declare the step as secure because it cannot guarantee the existence of a set of remedial actions that will make the network secure after the failing contingency.
+
+For more information on the loadflow module used in GridCapa, see the [OpenLoadflow documentation](https://powsybl.readthedocs.io/projects/powsybl-open-loadflow/en/latest/index.html).
+
 ### Step update strategy
 
 The step update strategy is divided into two phases:
-- while only unsecure exchange values are found, the next exchange value is the latest computed, decreased by 650 MW. While only secure values are found, the exchange value increases by 650 MW.
-- once at least one secure and one unsecure exchange value is found, a dichotomy is run: if the lowest unsecure exchange value computed so far is x MW and the highest secure exchange value is y MW, the next exchange value analysed is (x+y)/2.
+- while only unsecure Italian import values are found, the next exchange value is the latest computed, decreased by 650 MW. While only secure values are found, the Italian import value increases by 650 MW.
+- once at least one secure and one unsecure Italian import value is found, a dichotomy is run: if the lowest unsecure Italian import value computed so far is x MW and the highest secure Italian import value is y MW, the next Italian import value analysed is (x+y)/2.
 
 ### Dichotomy precision
 
-The computation stops when the difference between the highest secure and the lowest unsecure exchange levels is lower or equal to 100 MW.
+The computation stops when the difference between the highest secure and the lowest unsecure Italian import levels is lower or equal to 100 MW.
 
 ## Output data postprocessing
 ### CRAC/CGM alignment rollback

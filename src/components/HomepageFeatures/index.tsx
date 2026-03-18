@@ -16,7 +16,7 @@ const FeatureList: FeatureItem[] = [
     description: (
       <>
         GridCapa is robustly used in operation on many capacity calculation and
-        validation process in Europe.
+        validation processes in Europe.
       </>
     ),
   },
@@ -26,17 +26,17 @@ const FeatureList: FeatureItem[] = [
     description: (
       <>
         GridCapa was designed from the ground up to be modular and scalable.
-        Computation resources are natively shared between all process and
+        Computation resources are natively shared between all processes and
         easily extendable at runtime.
       </>
     ),
   },
   {
-    title: 'Open source / Powered by PowSyBl',
-    Svg: require('@site/static/img/undraw_docusaurus_react.svg').default,
+    title: 'Open-source - Powered by PowSyBl',
+    Svg: require('@site/static/img/powsybl.svg').default,
     description: (
       <>
-        GridCapa is open source and based on PowSyBl open source framework,
+        GridCapa is open source and based on PowSyBl open-source framework,
         providing both efficiency and transparency.
       </>
     ),
