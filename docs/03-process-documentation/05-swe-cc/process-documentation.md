@@ -80,7 +80,7 @@ $$
 
 ####Applying shift for each country corresponding to the dichotomy step
 
-The shift is applied on the scalable list for each country respecting the limitation of each scalable from Glsk file.
+The shift is applied on the scalable list for each country respecting the limitation of each scalable from GLSK file.
 
 For ES and PT, if the asked shift is positive, the Up scalables will be used (flowDirection A01). Otherwise the Down scalables will be used instead (flowDirection A02).
 
@@ -89,18 +89,18 @@ If after connecting the transformer, the generator still disconnected from the m
 
 #### Compensation of losses
 
-To compensate the losses on the network, the shift is iterative until respecting the tolerance for each border.  After each iteration, a loadflow is run to compute real borders exchanges and compare with target values (mismatch = target exchange - real exchange after shift). The tolerance for each border exchange are configurable for each dichotomy direction.
+To compensate the losses on the network, the shift is iterative until respecting the tolerance for each border. After each iteration, a loadflow is run to compute real borders exchanges and compare with target values (mismatch = target exchange - real exchange after shift). The tolerance for each border exchange are configurable for each dichotomy direction.
 
 The shift succeeds when target exchanges values are reached.
 
 #### GLSK limitation check
 
-After each iteration, if the asked variation for any country was not reached, the algorithm check if there is a Glsk limitation error for this country:
+After each iteration, if the asked variation for any country was not reached, the algorithm check if there is a GLSK limitation error for this country:
 
-- In case of asked variation on the country > 0: The shift difference (done variation  - asked variation ) will be < 0, we have Glsk limitation if the next asked value increase (i.e exchange mismatch < 0)
-- In case of asked variation on the country < 0: The shift difference (done variation  - asked variation ) will be > 0, we have Glsk limitation if the next asked value decrease (i.e exchange mismatch > 0)
+- In case of asked variation on the country > 0: The shift difference (done variation - asked variation ) will be < 0, we have GLSK limitation if the next asked value increase (i.e exchange mismatch < 0)
+- In case of asked variation on the country < 0: The shift difference (done variation - asked variation ) will be > 0, we have GLSK limitation if the next asked value decrease (i.e exchange mismatch > 0)
 
-If no Glsk limitation error is thrown, the asked values by country for the next iteration will be updated with mismatch
+If no GLSK limitation error is thrown, the asked values by country for the next iteration will be updated with mismatch
 
 $$
 Shift(ES)_{iteration_2} = Shift(ES)_{iteration_1} + mismatch_{ES-PT} + mismatch_{ES-FR}
@@ -120,13 +120,36 @@ After shift succeeds, if the new setpoint of the generators are above the initia
 
 If the shift failed after maximum number of iteration (the number max of iteration is configurable), an error message will be raised "Balancing adjustment out of tolerances"  with the values of borders exchanges. In this case the step of dichotomy is considered as unsecure.
 
-
 ### RAO
-#### Secure
 
+The RAO computation is run with CASTOR, a search-tree algorithm developed in OpenRAO. For more information, read the [documentation](https://powsybl.readthedocs.io/projects/openrao/en/stable/algorithms/castor.html).
+
+### Objective function 
+
+A non-costly RAO is used in the dichotomy. The objective function is SECURE_FLOW, which means that the algorithm stops 
+as soon as it finds a solution where the minimum margin is positive. 
+
+For more detailed information, read the [related OpenRAO documentation](https://powsybl.readthedocs.io/projects/openrao/en/stable/parameters/business-parameters.html#objective-function-parameters).
+
+#### Secure
+If the RAO finds at least one set of remedial actions in basecase and after each contingency for which all monitored elements are secure, the exchange value is considered as secure.
 
 #### Unsecure
+If the RAO is unable to find a set of remedial actions for which at least one state (basecase or after contingency) is secure, the exchange level is unsecure.
+
 #### Divergence
+In some situations, the loadflow or the sensitivity computation used inside the RAO diverges.
+This is due to difficult electrical situations, possibly linked to the network model or to big unbalances linked to the flow distribution after shift or the simulation of a contingency.
+
+Inside the algorithm, the cause of the failure of the computation is due to unrealistic voltage values (UNREALISTIC_STATE in the solver status) or to the maximum number of iterations reached in the Newton-Raphson algorithm (MAX_ITERATION_REACHED in solver status) or in the outerloop (UNSTABLE outerloop status).
+
+In case of divergence, the step is considered as unsecure.
+
+In some cases, the sensitivity computation fails only partially (after a given contingency simulation). In this case, even 
+though the RAO finds secure states after basecase and all the other contingencies, it cannot declare the step as secure because it cannot guarantee the existence of a set of remedial actions that will make the network secure after the failing contingency.
+
+For more information on the loadflow module used in GridCapa, see the [OpenLoadflow documentation](https://powsybl.readthedocs.io/projects/powsybl-open-loadflow/en/latest/index.html).
+
 ### Step update strategy
 
 The step update strategy follows the rules of a dichotomy: if the lowest unsecure exchange value computed so far is x MW and the highest secure exchange value is y MW, the next exchange value analysed is (x+y)/2.
