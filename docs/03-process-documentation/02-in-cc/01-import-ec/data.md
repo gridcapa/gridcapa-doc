@@ -25,9 +25,10 @@ For a detailed description of the UCTE-DEF format, you can refer to the [format 
 
 ### CRAC
 
-**TODO** To be added
-- Description of the format
-- N-2 (Following the blackout in Italy in 2003, Terna's risk management requires systematic monitoring of N-2 contingencies on common support under favorable conditions.)
+> **?** To be added:
+> - Description of the format
+> - Name for IDCC process
+> - N-2 (Following the blackout in Italy in 2003, Terna's risk management requires systematic monitoring of N-2 contingencies on common support under favorable conditions.)
 
 The merged CRAC file must be named as follows: **YYYYMMDD_hhmm_2DX_CO_CRAC_CSEW.xml**
 

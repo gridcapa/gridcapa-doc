@@ -241,7 +241,7 @@ The shifted CGM network file output is the final network file with activated pre
 - **For D2CC**, it is exported in UCTE format to be retrievable through the GridCapa UI as an output. It can also be retrieved as an output of the task on MinIO at the path **CSE/IMPORT_EC/D2CC/\<year\>/\<month\>/\<day\>/\<hour\>_\<minute\>/OUTPUTS/\<year\>\<month\>\<day\>_\<hour\>\<minute\>_2D\<dayOfWeek\>_CO_Final_CSE1.uct**.
 - **For IDCC**, it is exported in UCTE format to be retrievable through the GridCapa UI as an output. It can also be retrieved as an output of the task on MinIO at the path **CSE/IMPORT_EC/IDCC/\<year\>/\<month\>/\<day\>/\<hour\>_\<minute\>/OUTPUTS/\<year\>\<month\>\<day\>_\<hour\>\<minute\>_\<generationHour\>\<dayOfWeek\>_CSE1.uct**.
 
-### TTC Res Export
+### TTC Res export
 
 #### In case of process success
 

@@ -20,7 +20,7 @@ The Baixas-Santa Llogaia HVDC line is represented by an equivalent model, that i
 
 There are two HVDC links between Baixas in France and Santa Llogaia in Spain. Each link is represented by an AC line associated with two generators and two loads (one generator and one load on each side of the AC line).
 
-> **?** Open question: diagram here
+![Baixas-Santa Llogaia HVDC equivalent model](/img/swe/hvdc.svg)
 
 For each link, VSC converter stations are created at both sides of the AC line, and an HVDC line is created in parallel of the AC line.
 The equivalent generators, loads and AC lines are disconnected from the network.
@@ -181,7 +181,7 @@ Voltage check algorithm is detailed in [PowSyBl OpenRAO documentation](https://p
 Angle monitoring is the process to check if angle constraints (i.e. limitation of the difference of voltage angle between two nodes) is respected.
 
 The angle constraint represents the physical limit that would make it possible to correctly close back a line after a trip occured.
-If voltage angle difference is too high, an automaton would disconnect the line automatically.
+If the voltage angle difference is too high, an automaton would disconnect the line automatically.
 
 This process is run after RAO validation, only on PT->ES and ES->PT directions, and if RAO is secure.
 
@@ -191,15 +191,41 @@ Angle monitoring algorithm is detailed in [PowSyBl OpenRAO documentation](https:
 
 ### Baixas-Santa Llogaia HVDC line post-processing
 
-- disconnect/reconnect and how
+Before the export of the CGM, the Baixas-Santa Llogaia HVDC line and its two VSC stations are deleted from the network.
+The generators and loads from the equivalent model are connected to the network, at generation/load values read from the HVDC line before its deletion. The equivalent AC line is also reconnected if the HVDC line was connected to the network.
 
 ### PST regulation
 
-- Two PSTs with CNECs in series
+On the Western part of the boundary between France and Spain, two PSTs are installed (in Arkale and Pragnères), in order to dispatch the flows among the few interconnections. 
+Operationally, this means that the lines monitored by these PSTs are not supposed to be the most limiting element of the RAO as the PST will relieve them, by transferring a part of the load to another interconnection - unless the PST is in abutment.
+However, the RAO algorithm does not enforce this operational behaviour, as its objective is to determine the existence of a set of remedial actions that will make the network secure, regardless whether this set of remedial actions is the most realistic one.
+
+For this reason, a post-treatment called PST regulation is applied on the lowest unsecure RAO result, only when the most limiting element is among the ones that are controlled by one of the two PSTs (that are not in abutment).
+
+The algorithm can have side effects on the other margins, which could result to a worse minimal margin than in the RAO.
+It stops either when the controlled elements are not the most limiting ones, or when the PSTs are in abutment.
+
+Eventually, the algorithm updates the results of the RAO for the CNE export, with adding the PSTs list of remedial actions
+
+For more details, see the [PST regulation documentation](https://powsybl.readthedocs.io/projects/openrao/en/latest/algorithms/castor/special-features/pst-regulation.html#pst-regulation).
 
 ### Shifted CGM export
+
+The Preventive Remedial Action (PRA) selected by the RAO are applied to the network, which is exported in CGMES format. The lowest unsecure CGM is always exported, whereas the highest secure is exported on demand.
+
 ### CNE file export
+
+Similarly to the CGM, the lowest unsecure CNE is always exported, whereas the highest secure is exported on demand.
+
 ### Voltage check result export
-### TTC file Export
+
+The results of the voltage check are exported in a JSON file.
+
+### TTC file export
 #### In case of process success
+
+If the computation is successful on the four directions, the four TTC files are exported into an XML file.
+
 #### In case of failure
+
+If one or several directions failed, the TTC file only contains the results of the successful directions.

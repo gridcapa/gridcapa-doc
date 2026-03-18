@@ -137,10 +137,9 @@ The configmap contains the IDs of the PSTs that should be removed from the regul
 ### CGMs
 
 For each border and each direction, the CGM of the first unsecure exchange level is exported in CGMES format.
-
-> **?** Open question: check if PRAs are applied
-
 On demand, the CGM at the last secure exchange value can also be exported.
+
+Before the export, the preventive remedial actions (PRAs) are applied to the CGMs.
 
 ### CNE files
 
@@ -150,4 +149,8 @@ Optionally, the last secure CNE can also be exported.
 
 ### Voltage check results
 
-For the border between France and Spain, the results of the voltage check are exported in json format. They contain the status of the computation (SECURE, UNSECURE, FAILURE) and the list of the unsecure constraint elements.
+For the border between France and Spain, the results of the voltage check are exported in JSON format. They contain the status of the computation (SECURE, UNSECURE, FAILURE) and the list of the unsecure constraint elements.
+
+### TTC file
+
+The highest secure exchange value for each border and direction is exported into an XML file, containing inside Additional_info/physical_echanges the border (from/to) and the value of the TTC.
