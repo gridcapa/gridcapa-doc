@@ -8,9 +8,9 @@ sidebar_position: 2
 
 The CGM is in CGMES format. It follows specific file naming conventions that are used to automatically feed the platform when
 new files appear on the FTP server.
-- The D2CC process is based on D2CF files that follow the file naming convention: **YYYYMMDDThhmmZ**\_**2D**\_**ttt**\_**pp**\_**vvv**.xml
-- The IDCC 1st run process is based on DACF files that follow the file naming convention: **YYYYMMDDThhmmZ**\_**1D**\_**ttt**\_**pp**\_**vvv**.xml
-- The IDCC 2nd run process is based on IDCF files that follow the file naming convention: **YYYYMMDDThhmmZ**\_**xx**\_**ttt**\_**pp**\_**vvv**.xml
+- The D2CC process is based on D2CF files that follow the file naming convention: **YYYYMMDD**T**hhmm**Z\_2D\_**ttt_pp_vvv**.xml
+- The IDCC 1st run process is based on DACF files that follow the file naming convention: **YYYYMMDD**T**hhmm**Z\_1D\_**ttt**\_**pp**\_**vvv**.xml
+- The IDCC 2nd run process is based on IDCF files that follow the file naming convention: **YYYYMMDD**T**hhmm**Z\_**xx**\_**ttt**\_**pp**\_**vvv**.xml
 
 Where:
 - **YYYY** is the timestamp year
@@ -28,7 +28,7 @@ Where:
 
 Each CGMES profile for each country is zipped.
 
-Additionally, two files named **YYYYMMDDThhmmZ**__**ENTSOE**\_**EQBD**\_**vvv**.xml and **YYYYMMDDThhmmZ**__**ENTSOE**\_**TPBD**\_**vvv**.xml
+Additionally, two files named **YYYYMMDD**T**hhmm**Z\_ENTSOE\_EQBD\_**vvv**.xml and **YYYYMMDD**T**hhmm**Z\_ENTSOE\_TPBD\_**vvv**.xml
 (with the conventions described above) are needed to complete the network description. These two files, called boundary sets, are uploaded less
 frequently as they contain permanent definitions of the equipments and topology in the boundaries of the region.
 
@@ -38,7 +38,7 @@ or further explanations on [PowSyBl website](https://powsybl.readthedocs.io/proj
 
 ### CRAC
 
-The merged CRAC file must be named as follows: **10VCORSWEPR-ENDE_18V0000000005KUU_SWE-CRAC-B15-A48-F011_**YYYYMMDD**-**bbb**.xml**
+The merged CRAC file must be named as follows: 10VCORSWEPR-ENDE_18V0000000005KUU_SWE-CRAC-B15-A48-F011\_**YYYYMMDD**-**bbb**.xml
 
 Where:
 - **YYYY** is the timestamp year
@@ -52,7 +52,7 @@ The CRAC is in CIM format, described in the [related OpenRAO documentation](http
 
 ### GLSK
 
-The merged GLSK file must be named as follows: **10VCORSWEPR-ENDE_18V0000000005KUU_SWE-GLSK-B22-A48-F008_**YYYYMMDD**-**bbb**.xml**
+The merged GLSK file must be named as follows: 10VCORSWEPR-ENDE_18V0000000005KUU_SWE-GLSK-B22-A48-F008\_**YYYYMMDD**-**bbb**.xml
 
 Where:
 - **YYYY** is the timestamp year

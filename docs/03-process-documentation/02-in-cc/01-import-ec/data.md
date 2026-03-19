@@ -8,33 +8,47 @@ sidebar_position: 2
 
 The CGM is in UCTE-DEF format, version 02. It follows specific file naming conventions that are used to automatically feed the platform when
 new files arrive on the FTP server.
-- The D2CC process is based on D2CF files that follow the file naming convention: **YYYYMMDD**_**hhmm**_2D**x**_UX**v**.uct
-- The IDCC run 2 process is based on IDCF files that follow the file naming convention: **YYYYMMDD**_**hhmm**_**yyx**_UX**v**.uct
+- The D2CC process is based on D2CF files that follow the file naming convention: **YYYYMMDD_hhmm**_2D**x**_UX**v**.uct
+- The IDCC run 2 process is based on IDCF files that follow the file naming convention: **YYYYMMDD_hhmm**_**yyx**_UX**v**.uct
 
 Where:
-- **YYYY** is the timestamp year
-- **MM** is the timestamp month
-- **DD** is the timestamp day in month
-- **hh** is the timestamp hour
-- **mm** is the timestamp minutes (usually 30)
-- **x** is the timestamp day of the week number (example: if the day is a Wednesday, x=3; if it's a Sunday, x=7)
-- **yy** is the forecast hour of the IDCC run 2 process
-- **v** is the file version
+- **YYYY** is the timestamp year,
+- **MM** is the timestamp month,
+- **DD** is the timestamp day in month,
+- **hh** is the timestamp hour,
+- **mm** is the timestamp minutes (usually 30),
+- **x** is the timestamp day of the week number (example: if the day is a Wednesday, x=3; if it's a Sunday, x=7),
+- **yy** is the forecast hour of the IDCC run 2 process,
+- **v** is the file version.
 
 For a detailed description of the UCTE-DEF format, you can refer to the [format specification](https://eepublicdownloads.entsoe.eu/clean-documents/pre2015/publications/ce/otherreports/UCTE-format.pdf).
 
 ### CRAC
 
-> **?** To be added:
-> - Description of the format
-> - Name for IDCC process
-> - N-2 (Following the blackout in Italy in 2003, Terna's risk management requires systematic monitoring of N-2 contingencies on common support under favorable conditions.)
+The CRAC is in a specific format, that follows specific file naming conventions that are used to automatically feed the platform when
+new files arrive on the FTP server.
 
-The merged CRAC file must be named as follows: **YYYYMMDD_hhmm_2DX_CO_CRAC_CSEW.xml**
+- The D2CC process is based on merged CRACs that follow the file naming convention: **YYYYMMDD**_**hhmm**_2D**x**_CO_CRAC_CSE**v**.xml
+- The IDCC run 2 process is based on IDCF files that follow the file naming convention: **YYYYMMDD_hhmm_yyx**_CRAC_CO_CSE**v**.xml
+
+- **YYYY** is the timestamp year,
+- **MM** is the timestamp month,
+- **DD** is the timestamp day in month,
+- **hh** is the timestamp hour,
+- **mm** is the timestamp minutes (usually 30),
+- **x** is the timestamp day of the week number (example: if the day is a Wednesday, x=3; if it's a Sunday, x=7),
+- **yy** is the forecast hour of the IDCC run 2 process,
+- **v** is the file version.
 
 For more information on the CSE CRAC format, see the [OpenRAO documentation](https://powsybl.readthedocs.io/projects/openrao/en/latest/input-data/crac/cse.html).
 
+> **?** To be added:
+> - N-2 (Following the blackout in Italy in 2003, Terna's risk management requires systematic monitoring of N-2 contingencies on common support under favorable conditions.)
+
 ### GLSK
+
+> **?** To be added:
+> - naming convention
 
 #### General description
 
@@ -160,7 +174,7 @@ The Italian Merit order GLSK contains two blocks with a factor set to 1 in both 
 
 The Vulcanus document is an Excel (.xls) file that specifies border exchanges for a day. It contains the scheduled exchanges, also called reference exchanges. The file presents data with a frequency of 15 minutes.
 
-The file must be named according to the following convention: **vulcanus_DDMMYYYY_96.xls** (Note: 96 represents the number of 15-minute intervals in a 24-hour day).
+The file must be named according to the following convention: vulcanus_**DDMMYYYY**_96.xls (Note: 96 represents the number of 15-minute intervals in a 24-hour day).
 
 #### Reference exchange for D2CC
 
@@ -188,7 +202,7 @@ For the special lines, several parameters define particular treatments:
 
 This data should be considered as the basis for the import but can be overwritten or supplemented by other inputs. It is typically used as backup data if the NTC red file is not available.
 
-The file must be named according to the following format: **YYYY_2DX_NTC_annual_CSEW.xml**
+The file must be named according to the following format: **YYYY**_2D**X**_NTC_annual_CSE**W**.xml
 
 ### NTC Reductions
 
@@ -201,7 +215,7 @@ This file serves multiple purposes:
 - As the initial value for the D2CC process (first step of the dichotomy)
 - As the reference value for splitting factors computation
 
-The file must be named according to the following format: **YYYYMMDD_2DX_NTC_reductions_CSEW.xml**, where X is the day of the week (1 for Monday) and Y is the version number.
+The file must be named according to the following format: **YYYYMMDD**_2D**X**_NTC_reductions_CSE**W**.xml, where **X** is the day of the week (1 for Monday) and **Y** is the version number.
 
 ### NTC2
 The NTC2 files are XML files containing NTC values updated with the D-2 computation results. Each file contains two CapacityTimeSeries, but only the one with the Italian InArea should be considered (Italian import). There is one NTC2 file for each country except Italy (AT, CH, FR, SI).
@@ -210,7 +224,7 @@ These files are used as the initial values for the IDCC process (first step of t
 
 The NTC2 files are only available for the IDCC process, as they contain D-2 data.
 
-The files must be named according to the following format: **NTC2_YYYYMMDD_2DX_PP-ITZ.xml** (where X is the day of the week and PP is the name of the control area, for instance CH). These files are contained in a folder named **22V-TERNA-ECPPRG_10V-RRRRRRRRRRRR_CCC-NTC2_YYYYMMDDVKK** (where RRRRRRRRRRRR is a code for the control area, such as SWISS-ECP-P7, and KK is the version number).
+The files must be named according to the following format: NTC2_**YYYYMMDD**_2D**X_PP**-IT**Z**.xml (where **X** is the day of the week and **PP** is the name of the control area, for instance CH). These files are contained in a folder named 22V-TERNA-ECPPRG_10V-**RRRRRRRRRRRR**_CCC-NTC2_**YYYYMMDD**V**KK** (where **RRRRRRRRRRRR** is a code for the control area, such as SWISS-ECP-P7, and **KK** is the version number).
 
 **TODO** Put this somewhere else:
 - Low-consumption days to be described here? They are days split in 4 intervals, with a strong limitation of the italian import, because of both a low consumption and a high renewable generation share. The import is limited to turn on thermal power stations that could solve the constraints. The planned maintenances impacting the interconnections are scheduled on such low-consumption days, to limit their impact on the available capacity.

@@ -12,31 +12,35 @@ new files arrive on the FTP server.
 - The IDCC run 2 process is based on IDCF files that follow the file naming convention: **YYYYMMDD**_**hhmm**_**yyx**_Transit_CSE**v**.uct
 
 Where:
-- **YYYY** is the timestamp year
-- **MM** is the timestamp month
-- **DD** is the timestamp day in month
-- **hh** is the timestamp hour
-- **mm** is the timestamp minutes (usually 30)
-- **x** is the timestamp day of the week number (example: if the day is a Wednesday, x=3; if it's a Sunday, x=7)
-- **yy** is the forecast hour of the IDCC run 2 process
-- **v** is the file version
+- **YYYY** is the timestamp year,
+- **MM** is the timestamp month,
+- **DD** is the timestamp day in month,
+- **hh** is the timestamp hour,
+- **mm** is the timestamp minutes (usually 30),
+- **x** is the timestamp day of the week number (example: if the day is a Wednesday, x=3; if it's a Sunday, x=7),
+- **yy** is the forecast hour of the IDCC run 2 process,
+- **v** is the file version.
 
 For a detailed description of the UCTE-DEF format, you can refer to the [format specification](https://eepublicdownloads.entsoe.eu/clean-documents/pre2015/publications/ce/otherreports/UCTE-format.pdf).
 
-> **?** Open questions:
-> - Differences with import EC data
-
 ### CRAC
 
+The CRAC is in a specific format, that follows specific file naming conventions that are used to automatically feed the platform when
+new files arrive on the FTP server.
 
-The merged CRAC file must be named as follows: **YYYYMMDD_hhmm_2DX_CO_CRAC_CSEW.xml**
+- The D2CC process is based on merged CRACs that follow the file naming convention: **YYYYMMDD**_**hhmm**_2D**x**_CO_CRAC_Transit_CSE**v**.xml
+- The IDCC run 2 process is based on IDCF files that follow the file naming convention: **YYYYMMDD**_**hhmm**_yy**x**_CO_CRAC_Transit_CSE**v**.xml
+
+- **YYYY** is the timestamp year,
+- **MM** is the timestamp month,
+- **DD** is the timestamp day in month,
+- **hh** is the timestamp hour,
+- **mm** is the timestamp minutes (usually 30),
+- **x** is the timestamp day of the week number (example: if the day is a Wednesday, x=3; if it's a Sunday, x=7),
+- **yy** is the forecast hour of the IDCC run 2 process,
+- **v** is the file version.
 
 For more information on the CSE CRAC format, see the [OpenRAO documentation](https://powsybl.readthedocs.io/projects/openrao/en/latest/input-data/crac/cse.html).
-
-> **?** Open questions:
-> - To be added: Description of the format
-> - Name for IDCC process
-> - Differences with import EC data
 
 ## Hardcoded data
 
@@ -54,3 +58,37 @@ Others, if not defined, are set to the default values listed in the documentatio
 
 ## Outputs
 
+### CSE RAO result
+
+The result of the RAO computation is exported in a file named TTC_Calculation_**YYYYMMDD_hhmm**_2D**x**_CO_RAO_Transit_CSE**v**.xml.
+
+- **YYYY** is the timestamp year,
+- **MM** is the timestamp month,
+- **DD** is the timestamp day in month,
+- **hh** is the timestamp hour,
+- **mm** is the timestamp minutes (usually 30),
+- **x** is the timestamp day of the week number (example: if the day is a Wednesday, x=3; if it's a Sunday, x=7),
+- **v** is the file version.
+
+The file format is in a specific CSE RAO result format in XML.
+
+> **?** To be added:
+> description of the file format
+
+### RAO logs
+
+The logs of the RAO computation are exported in a file named rao_logs.txt.
+
+The detail of the logs is described in the [OpenRAO documentation](https://powsybl.readthedocs.io/projects/openrao/en/stable/output-data/rao-logs.html).
+
+### Network 
+
+The network file with applied Preventive Remedial Actions (PRAs) is exported in a file named **YYYYMMDD_hhmm**_2D**x**_ce_Transit_RAO_CSE**v**.uct.
+
+- **YYYY** is the timestamp year,
+- **MM** is the timestamp month,
+- **DD** is the timestamp day in month,
+- **hh** is the timestamp hour,
+- **mm** is the timestamp minutes (usually 30),
+- **x** is the timestamp day of the week number (example: if the day is a Wednesday, x=3; if it's a Sunday, x=7),
+- **v** is the file version.

@@ -25,7 +25,7 @@ The F119 document is a zip containing the 24 networks in UCTE format and an xml 
 The networks are in UCTE-DEF format, version 02. They follow specific file naming conventions that are used to automatically feed the platform when
 new files arrive on the FTP server. The process is based on the merged D2CF grid models, to form a Common Grid Model (CGM).
 
-The network files follow the naming convention: **YYYYMMDD_hhmm**_2D**a**_UX**V**_FEXPORTGRIDMODEL_CGM_17XTSO-CS------W.uct.
+The network files follow the naming convention: **YYYYMMDD**_**hhmm**_2D**a**_UX**V**_FEXPORTGRIDMODEL_CGM_17XTSO-CS------W.uct.
 
 Where:
 - **YYYY** is the year of the timestamp
