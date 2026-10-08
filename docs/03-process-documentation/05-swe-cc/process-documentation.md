@@ -211,7 +211,7 @@ For more details, see the [PST regulation documentation](https://powsybl.readthe
 
 ### Shifted CGM export
 
-The Preventive Remedial Action (PRA) selected by the RAO are applied to the network, which is exported in CGMES format. The lowest unsecure CGM is always exported, whereas the highest secure is exported on demand.
+The Preventive Remedial Action (PRA) selected by the RAO are applied to the network, which is exported in CGMES format. The highest secure CGM is always exported, whereas the lowest unsecure is exported on demand.
 
 ### CNE file export
 

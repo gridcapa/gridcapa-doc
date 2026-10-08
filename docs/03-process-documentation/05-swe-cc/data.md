@@ -136,8 +136,8 @@ The configmap contains the IDs of the PSTs that should be removed from the regul
 
 ### CGMs
 
-For each border and each direction, the CGM of the first unsecure exchange level is exported in CGMES format.
-On demand, the CGM at the last secure exchange value can also be exported.
+For each border and each direction, the CGM of the last secure exchange level is exported in CGMES format.
+On demand, the CGM at the first unsecure exchange value can also be exported.
 
 Before the export, the preventive remedial actions (PRAs) are applied to the CGMs.
 
