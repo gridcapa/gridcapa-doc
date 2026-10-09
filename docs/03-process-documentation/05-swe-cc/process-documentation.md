@@ -38,7 +38,7 @@ In the SWE processes, four computations are run in parallel for a single timesta
 ### Initial exchange value
 
 **For D2CC**, there is no exchange on the borders in the initial CGMs. This exchange level is considered as secure, which means that no computation is run for the lowest exchange level.
-Then, for the given direction, the exchange value is modified through a balances adjustment, to reach the value of 6400 MW (while keeping the other border at 0 MW).
+Then, for the given direction, the exchange value is modified through a balances adjustment, to reach the value of 3200 MW (while keeping the other border at 0 MW).
 
 > **?** Open questions: IDCC
 
@@ -154,9 +154,7 @@ For more information on the loadflow module used in GridCapa, see the [OpenLoadf
 
 The step update strategy follows the rules of a dichotomy: if the lowest unsecure exchange value computed so far is x MW and the highest secure exchange value is y MW, the next exchange value analysed is (x+y)/2.
 
-Assuming that the network is secure for an exchange of 0 MW in the studied direction and considering that 6400 MW is very likely to be unsecure, this step update strategy applies from the second step on (the first being 6400 MW).
-
-> **?** Open questions: What happens if 6400 MW is secure, in theory? Is 6400 MW the installed capacity
+The network is assumed to be secure for an exchange of 0 MW in the studied direction and unsecure for an exchange of 6400 MW.
 
 ### Dichotomy precision
 
