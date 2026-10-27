@@ -193,24 +193,24 @@ A flow or a threshold associated to one monitored element are defined by a Measu
 
 This section details the representation of branch flow constraints (in Amperes), which constitute the standard use case. (For other types of constraints such as angle or voltage monitoring, see the Additional Constraints section at the end of this document).
 
-| What do we want to represent?                                              | XML element corresponding in the CNE                   | Comments                                      |
-|----------------------------------------------------------------------------|--------------------------------------------------------|-----------------------------------------------|
-| A monitored element                                                        | Monitored_Series                                       |                                               |
-| The UID of the  monitored element                                          | mRID                                                   |                                               |
-| The name of the  monitored element                                         | Name                                                   | Facultative                                   |
-|                                                                            | Registered_Resource                                    | Exactly one                                   |
-| The UID of the network element to monitor                                  | Registered_Resource/mRID                               |                                               |
-| The name of the network element to monitor                                 | Registered_Resource/Name                               | Facultative                                   |
-| The origin node if the element is monitored only in one direction          | Registered_Resource/In_AggregatedNode                  |                                               |
-| The extremity node                                                         | Registered_Resource/Out_AggregatedNode                 |                                               |
-| PTDF in an area                                                            | Registered_Resource/PTDF_Domain                        | Facultative (depends on the computation type) |
-| Code of the area                                                           | Registered_Resource/PTDF_Domain/mRID                   |                                               |
-| Value of the PTDF                                                          | Registered_Resource/PTDF_Domain/pTDF_Quantity.quantity |                                               |
-| One per threshold and per direction to monitor                             | Registered_Resource/Measurements                       | At least one                                  |
-| Flow, or Instant associated to the threshold                               | Registered_Resource/Measurements/measurementType       | See mapping table                             |
-| Unit of the flow/threshold                                                 | Registered_Resource/Measurements/unitSymbol            | See mapping table                             |
-| The direction to monitor if the element is monitored only in one direction | Registered_Resource/Measurements/positiveFlowIn        | Facultative                                   |
-| Value of the flow/threshold                                                | Registered_Resource/Measurements/analogValues.value    |                                               |
+| What do we want to represent?                                              | XML element corresponding in the CNE                   | Comments                                                                  |
+|----------------------------------------------------------------------------|--------------------------------------------------------|---------------------------------------------------------------------------|
+| A monitored element                                                        | Monitored_Series                                       |                                                                           |
+| The UID of the  monitored element                                          | mRID                                                   |                                                                           |
+| The name of the  monitored element                                         | Name                                                   | Facultative                                                               |
+|                                                                            | RegisteredResource                                     | Exactly one                                                               |
+| The UID of the network element to monitor                                  | RegisteredResource/mRID                                | Native network ID (with `codingScheme="A02"`)                             |
+| The name of the network element to monitor                                 | RegisteredResource/name                                | Facultative                                                               |
+| The origin node if the element is monitored only in one direction          | RegisteredResource/in_AggregateNode.mRID                | Origin voltage level ID (with `codingScheme="A02"`)                       |
+| The extremity node                                                         | RegisteredResource/out_AggregateNode.mRID               | Extremity voltage level ID (with `codingScheme="A02"`)                    |
+| PTDF in an area                                                            | RegisteredResource/PTDF_Domain                         | Facultative (not exported in SWE region as margins are not relative)      |
+| Code of the area                                                           | RegisteredResource/PTDF_Domain/mRID                    |                                                                           |
+| Value of the PTDF                                                          | RegisteredResource/PTDF_Domain/pTDF_Quantity.quantity  |                                                                           |
+| One per threshold and per direction to monitor                             | RegisteredResource/Measurements                        | At least one                                                              |
+| Flow, or Instant associated to the threshold                               | RegisteredResource/Measurements/measurementType        | See mapping table                                                         |
+| Unit of the flow/threshold                                                 | RegisteredResource/Measurements/unitSymbol             | See mapping table (`AMP`)                                                 |
+| The direction to monitor if the element is monitored only in one direction | RegisteredResource/Measurements/positiveFlowIn         | `A01` (direct / positive flow) or `A02` (opposite / negative flow)        |
+| Value of the flow/threshold                                                | RegisteredResource/Measurements/analogValues.value     | Absolute value of the flow/threshold                                      |
 
 ### Example
 
@@ -305,16 +305,16 @@ What happens when several thresholds were defined for a single instant in the CR
 
 How is the direction of the monitoring specified?
 
-> To specify the direction of monitoring, attributes in and out AggregateNode are defined at RegisteredResource level. These fields define the origin and extremity nodes used as reference for this RegisteredResource.
+> To specify the direction of monitoring, attributes `in_AggregateNode.mRID` and `out_AggregateNode.mRID` are defined at `RegisteredResource` level. These fields define the origin and extremity nodes used as reference for this `RegisteredResource`.
 >
-> Then, each measurement is associated to a direction using the positiveFlowIn attribute.
+> Then, each measurement indicates its sign/direction using the `positiveFlowIn` attribute:
 >
-> | Need                                       | positiveFlowIn Code | 
-> |--------------------------------------------|---------------------|
-> | Monitor flow from Out to In AggregateNode  | A01                 |
-> | Monitor flow from In to Out AggregateNode  | A02                 |
+> | Need                                                        | positiveFlowIn Code | Description                                                          |
+> |-------------------------------------------------------------|---------------------|----------------------------------------------------------------------|
+> | Direct flow / Positive measurement (`In -> Out`)            | A01                 | Measurement value is positive (`actual value = analogValues.value`)  |
+> | Opposite flow / Negative measurement (`Out -> In`)          | A02                 | Measurement value is negative (`actual value = -analogValues.value`) |
 >
-> The direction displayed in the CNE export corresponds to the positive flow on the line (because of xsd limitations). Thus, in case of bidirectional thresholds, only the one in direction of the flow is exported.
+> In case of bidirectional thresholds, only the limiting threshold in the direction of the flow is exported.
 
 
 ## How are remedial actions represented?
@@ -419,15 +419,34 @@ Why is `RegisteredResource` omitted in `B57` Constraint_Series?
 
 ## What general information is available?
 
-The header of a CNE document contains some hardcoded general information, not detailed in this document. Besides, it contains exactly one TimeSeries, containing exactly one Period, that contains one Point.
+### Header
 
-A Point gathers all the Constraint_Series, as well as a Reason. The code and text inside the Reason contain information about the status of the computation:
+The header of a CNE document contains metadata identifying the document, sender, receiver, and applicability period:
 
-| Reason code | Reason text            | Comments                                                 |
-|-------------|------------------------|----------------------------------------------------------|
-| Z13         | Network is secure      | Computation succeeded and all constraints are respected  |
-| Z03         | Network is unsecure    | Computation succeeded but some constraints remain violated |
-| B18         | Rao failure            | RAO computation failed or load flow diverged             |
+| Field                                         | XML element                                  | Value / Comments                                                                        |
+|-----------------------------------------------|----------------------------------------------|-----------------------------------------------------------------------------------------|
+| Document ID                                   | `mRID`                                       | Unique document identifier                                                              |
+| Revision number                               | `revisionNumber`                             | Document version number                                                                 |
+| Document type                                 | `type`                                       | `B06` (Critical Network Element Market Document)                                        |
+| Process type                                  | `process.processType`                        | `Z01` (Day-ahead capacity determination for SWE region)                                 |
+| Sender ID                                     | `sender_MarketParticipant.mRID`              | ENTSO-E EICode (with `codingScheme="A01"`)                                              |
+| Sender role                                   | `sender_MarketParticipant.marketRole.type`   | `A04` (System Operator), `A36` (Capacity Coordinator), `A44` (RSC)                      |
+| Receiver ID                                   | `receiver_MarketParticipant.mRID`            | ENTSO-E EICode (with `codingScheme="A01"`)                                              |
+| Receiver role                                 | `receiver_MarketParticipant.marketRole.type` | `A04`, `A36` or `A44`                                                                   |
+| Creation timestamp                            | `createdDateTime`                            | UTC date and time of document generation                                                |
+| Time interval                                 | `time_Period.timeInterval`                   | Start and end dates of applicability (`start` / `end`)                                  |
+
+### TimeSeries and Point
+
+The body of the CNE document contains exactly one `TimeSeries` (with `businessType="B54"` and `curveType="A01"`), containing exactly one `Period` (resolution `PT60M`), that contains one `Point` (`position="1"`).
+
+A `Point` gathers all the `Constraint_Series` (`B56` and `B57`), as well as an overall `Reason` tag indicating the status of the computation:
+
+| Reason code | Reason text            | Comments                                                    |
+|-------------|------------------------|-------------------------------------------------------------|
+| Z13         | Network is secure      | Computation succeeded and all constraints are respected     |
+| Z03         | Network is unsecure    | Computation succeeded but some constraints remain violated  |
+| B18         | Rao failure            | RAO computation failed or load flow diverged                |
 
 ## Additional Constraints (Angle and Voltage Monitoring)
 
@@ -435,22 +454,33 @@ In the vast majority of cases, capacity calculation and security analysis focus 
 
 ### Angle CNECs (`AdditionalConstraint_Series`)
 
-When angle monitoring is configured, angle constraints after a contingency are exported inside the contingency `B57` Constraint_Series using `AdditionalConstraint_Series` elements rather than `Monitored_Series`.
+When angle monitoring is configured in the CRAC, angle constraints are exported inside the contingency `B57` Constraint_Series using `AdditionalConstraint_Series` elements rather than `Monitored_Series`:
+
+- **Scope**: Angle CNECs are only exported after contingencies (in `B57` Constraint_Series with a `Contingency_Series`). They are not exported in the preventive basecase.
+- **Instant**: Only angle CNECs defined at the **curative** instant are exported.
 
 | What do we want to represent?           | XML element in CNE                                      | Comments                                              |
 |-----------------------------------------|---------------------------------------------------------|-------------------------------------------------------|
-| An additional constraint                | `AdditionalConstraint_Series`                           | Grouped inside `B57` Constraint_Series                |
-| UID of the constraint                   | `mRID`                                                  | Unique identifier of the angle CNEC                   |
-| Business type of the constraint         | `businessType`                                          | `B87` for Angle CNEC                                  |
-| Monitored angle value                   | `quantity.quantity`                                     | Value of the angle difference (in degrees)            |
-| Direction / Sign convention             | `positiveFlowIn`                                        | `A01` (positive angle) or `A02` (negative angle)       |
-| Origin and Extremity nodes              | `In_AggregateNode` / `Out_AggregateNode`                | Reference nodes defining the angle difference         |
-| Threshold value                         | `threshold_Quantity.quantity`                           | Admissible angle threshold (in degrees)               |
-| Unit of the constraint                  | `threshold_Quantity.unitSymbol` / `unitSymbol`          | `DD` (degrees)                                        |
+| An additional constraint                | `AdditionalConstraint_Series`                           | Grouped inside contingency `B57` Constraint_Series    |
+| UID of the constraint                   | `mRID`                                                  | Unique identifier of the angle CNEC from native CRAC  |
+| Business type of the constraint         | `businessType`                                          | Fixed value `B87` for Angle CNEC                      |
+| Name of the constraint                  | `name`                                                  | Name of the angle CNEC from native CRAC (Facultative) |
+| Monitored angle value                   | `quantity.quantity`                                     | Resulting phase shift angle value (in degrees)        |
+
+#### Example
+
+```xml
+<AdditionalConstraint_Series>
+    <mRID>REN-AC-2</mRID>
+    <businessType>B87</businessType>
+    <name>Angle-ALTO-LINDOSO-CARTELLE-EXPORT</name>
+    <quantity.quantity>-39.8</quantity.quantity>
+</AdditionalConstraint_Series>
+```
 
 ### Voltage Monitoring
 
-Voltage constraints (e.g. high/low voltage limits at monitored buses) can also be monitored during optimization. When exported or post-processed into CNE files, voltage constraints and limits follow dedicated CNE schema elements according to regional business requirements.
+Voltage constraints (e.g. high/low voltage limits at monitored buses) are not exported in the SWE CNE format by OpenRAO.
 
 ## Appendices
 
@@ -592,9 +622,7 @@ Below is an excerpt illustrating the structure of a complete SWE CNE document, s
                     </RemedialAction_Series>
                 </Constraint_Series>
                 <Reason>
-                    <ReasonCode>
-                        <value>Z13</value>
-                    </ReasonCode>
+                    <code>Z13</code>
                     <text>Network is secure</text>
                 </Reason>
             </Point>
