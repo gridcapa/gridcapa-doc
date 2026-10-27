@@ -172,7 +172,12 @@ Through its UID, more information about the contingency (list of the tripped ele
 
 ### Example
 
-TODO
+```xml
+<Contingency_Series>
+    <mRID>Co-1</mRID>
+    <name>Contingency 1 name</name>
+</Contingency_Series>
+```
 
 ### FAQ
 
@@ -209,7 +214,65 @@ This section details the representation of branch flow constraints (in Amperes),
 
 ### Example
 
-TODO
+Here is an example of a basecase `Monitored_Series` with a flow measurement (`A01`) and a PATL threshold (`A02`):
+
+```xml
+<Monitored_Series>
+    <mRID>CNEC-1</mRID>
+    <name>CNEC-1-name</name>
+    <RegisteredResource>
+        <mRID codingScheme="A02">DDE2AA11 NNL3AA11 1</mRID>
+        <name>CNEC-1</name>
+        <in_AggregateNode.mRID codingScheme="A02">DDE2AA1</in_AggregateNode.mRID>
+        <out_AggregateNode.mRID codingScheme="A02">NNL3AA1</out_AggregateNode.mRID>
+        <Measurements>
+            <measurementType>A01</measurementType>
+            <unitSymbol>AMP</unitSymbol>
+            <positiveFlowIn>A01</positiveFlowIn>
+            <analogValues.value>1220.0</analogValues.value>
+        </Measurements>
+        <Measurements>
+            <measurementType>A02</measurementType>
+            <unitSymbol>AMP</unitSymbol>
+            <positiveFlowIn>A02</positiveFlowIn>
+            <analogValues.value>40.0</analogValues.value>
+        </Measurements>
+    </RegisteredResource>
+</Monitored_Series>
+```
+
+And an example after contingency with multiple thresholds (Outage `A07`, Auto `A12`, Curative `A13`):
+
+```xml
+<Monitored_Series>
+    <mRID>CNEC-2</mRID>
+    <name>CNEC-2-name</name>
+    <RegisteredResource>
+        <mRID codingScheme="A02">FFR1AA11 FFR2AA11 1</mRID>
+        <name>CNEC-2</name>
+        <in_AggregateNode.mRID codingScheme="A02">FFR1AA1</in_AggregateNode.mRID>
+        <out_AggregateNode.mRID codingScheme="A02">FFR2AA1</out_AggregateNode.mRID>
+        <Measurements>
+            <measurementType>A01</measurementType>
+            <unitSymbol>AMP</unitSymbol>
+            <positiveFlowIn>A01</positiveFlowIn>
+            <analogValues.value>4220.0</analogValues.value>
+        </Measurements>
+        <Measurements>
+            <measurementType>A12</measurementType>
+            <unitSymbol>AMP</unitSymbol>
+            <positiveFlowIn>A02</positiveFlowIn>
+            <analogValues.value>12.0</analogValues.value>
+        </Measurements>
+        <Measurements>
+            <measurementType>A13</measurementType>
+            <unitSymbol>AMP</unitSymbol>
+            <positiveFlowIn>A02</positiveFlowIn>
+            <analogValues.value>13.0</analogValues.value>
+        </Measurements>
+    </RegisteredResource>
+</Monitored_Series>
+```
 
 ### FAQ
 
@@ -288,7 +351,52 @@ Please find below how the `RegisteredResource` is built for PST range actions:
 
 ### Example
 
-TODO
+#### PST Range Remedial Action (in `B56` Constraint_Series)
+
+In `B56`, the PST range action contains the calculated optimal tap in `mRID` (`PRA_1@-7@`) and includes a `RegisteredResource` describing the equipment:
+
+```xml
+<RemedialAction_Series>
+    <mRID>PRA_1@-7@</mRID>
+    <name>PRA_1</name>
+    <applicationMode_MarketObjectStatus.status>A18</applicationMode_MarketObjectStatus.status>
+    <RegisteredResource>
+        <mRID codingScheme="A02">BBE2AA11 BBE3AA11 1</mRID>
+        <name>RA1-name</name>
+        <pSRType.psrType>A06</pSRType.psrType>
+        <marketObjectStatus.status>A26</marketObjectStatus.status>
+        <resourceCapacity.defaultCapacity>-7</resourceCapacity.defaultCapacity>
+        <resourceCapacity.unitSymbol>C62</resourceCapacity.unitSymbol>
+    </RegisteredResource>
+</RemedialAction_Series>
+```
+
+#### Remedial Actions in `B57` Constraint_Series (Reference only)
+
+In `B57`, remedial actions are referenced without `RegisteredResource`:
+
+```xml
+<!-- PST reference with optimal tap -->
+<RemedialAction_Series>
+    <mRID>PRA_1@-7@</mRID>
+    <name>PRA_1</name>
+    <applicationMode_MarketObjectStatus.status>A18</applicationMode_MarketObjectStatus.status>
+</RemedialAction_Series>
+
+<!-- HVDC reference with optimal setpoint in MW -->
+<RemedialAction_Series>
+    <mRID>HVDC-direction11@100.0@</mRID>
+    <name>HVDC-direction11@100.0@</name>
+    <applicationMode_MarketObjectStatus.status>A20</applicationMode_MarketObjectStatus.status>
+</RemedialAction_Series>
+
+<!-- Network / Topological action -->
+<RemedialAction_Series>
+    <mRID>na1</mRID>
+    <name>na1-name</name>
+    <applicationMode_MarketObjectStatus.status>A19</applicationMode_MarketObjectStatus.status>
+</RemedialAction_Series>
+```
 
 ### FAQ
 
@@ -346,7 +454,154 @@ Voltage constraints (e.g. high/low voltage limits at monitored buses) can also b
 
 ## Appendices
 
-TODO
+### Sample CNE XML Structure
+
+Below is an excerpt illustrating the structure of a complete SWE CNE document, showing the root element, `TimeSeries`, `Period`, `Point`, and both `B56` (applied remedial actions) and `B57` (monitored elements and RA references) `Constraint_Series` for basecase and post-contingency states:
+
+```xml
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<CriticalNetworkElement_MarketDocument xsi:schemaLocation="iec62325-451-n-cne_v2_3.xsd" xmlns="urn:iec62325.351:tc57wg16:451-n:cnedocument:2:3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <mRID>documentId</mRID>
+    <revisionNumber>1</revisionNumber>
+    <type>B06</type>
+    <process.processType>Z01</process.processType>
+    <sender_MarketParticipant.mRID codingScheme="A01">senderId</sender_MarketParticipant.mRID>
+    <sender_MarketParticipant.marketRole.type>A04</sender_MarketParticipant.marketRole.type>
+    <receiver_MarketParticipant.mRID codingScheme="A01">receiverId</receiver_MarketParticipant.mRID>
+    <receiver_MarketParticipant.marketRole.type>A36</receiver_MarketParticipant.marketRole.type>
+    <createdDateTime>2024-12-19T11:04:18Z</createdDateTime>
+    <time_Period.timeInterval>
+        <start>2021-08-27T15:22Z</start>
+        <end>2021-08-27T16:22Z</end>
+    </time_Period.timeInterval>
+    <TimeSeries>
+        <mRID>CNE_RAO_CASTOR-TimeSeries-1</mRID>
+        <businessType>B54</businessType>
+        <curveType>A01</curveType>
+        <Period>
+            <timeInterval>
+                <start>2021-04-02T12:00Z</start>
+                <end>2021-04-02T13:00Z</end>
+            </timeInterval>
+            <resolution>PT60M</resolution>
+            <Point>
+                <position>1</position>
+                <!-- Basecase B56: Applied Preventive Remedial Actions -->
+                <Constraint_Series>
+                    <mRID>6495270-91d7-4e19-bdba-b1e2f11cd59e</mRID>
+                    <businessType>B56</businessType>
+                    <RemedialAction_Series>
+                        <mRID>PRA_1@-7@</mRID>
+                        <name>PRA_1</name>
+                        <applicationMode_MarketObjectStatus.status>A18</applicationMode_MarketObjectStatus.status>
+                        <RegisteredResource>
+                            <mRID codingScheme="A02">BBE2AA11 BBE3AA11 1</mRID>
+                            <name>RA1-name</name>
+                            <pSRType.psrType>A06</pSRType.psrType>
+                            <marketObjectStatus.status>A26</marketObjectStatus.status>
+                            <resourceCapacity.defaultCapacity>-7</resourceCapacity.defaultCapacity>
+                            <resourceCapacity.unitSymbol>C62</resourceCapacity.unitSymbol>
+                        </RegisteredResource>
+                    </RemedialAction_Series>
+                </Constraint_Series>
+                <!-- Contingency B56: Applied Auto / Curative RAs -->
+                <Constraint_Series>
+                    <mRID>512172b-361c-44cc-8100-dc531f328ee3</mRID>
+                    <businessType>B56</businessType>
+                    <Contingency_Series>
+                        <mRID>Co-1</mRID>
+                        <name>Contingency 1 name</name>
+                    </Contingency_Series>
+                    <RemedialAction_Series>
+                        <mRID>HVDC-direction11@100.0@</mRID>
+                        <name>HVDC-direction11@100.0@</name>
+                        <applicationMode_MarketObjectStatus.status>A20</applicationMode_MarketObjectStatus.status>
+                    </RemedialAction_Series>
+                </Constraint_Series>
+                <!-- Basecase B57: Monitored flows, PATL & PRA references -->
+                <Constraint_Series>
+                    <mRID>604e063-9929-4da9-a96d-bc4c088d19f6</mRID>
+                    <businessType>B57</businessType>
+                    <Monitored_Series>
+                        <mRID>CNEC-1</mRID>
+                        <name>CNEC-1-name</name>
+                        <RegisteredResource>
+                            <mRID codingScheme="A02">DDE2AA11 NNL3AA11 1</mRID>
+                            <name>CNEC-1</name>
+                            <in_AggregateNode.mRID codingScheme="A02">DDE2AA1</in_AggregateNode.mRID>
+                            <out_AggregateNode.mRID codingScheme="A02">NNL3AA1</out_AggregateNode.mRID>
+                            <Measurements>
+                                <measurementType>A01</measurementType>
+                                <unitSymbol>AMP</unitSymbol>
+                                <positiveFlowIn>A01</positiveFlowIn>
+                                <analogValues.value>1220.0</analogValues.value>
+                            </Measurements>
+                            <Measurements>
+                                <measurementType>A02</measurementType>
+                                <unitSymbol>AMP</unitSymbol>
+                                <positiveFlowIn>A02</positiveFlowIn>
+                                <analogValues.value>40.0</analogValues.value>
+                            </Measurements>
+                        </RegisteredResource>
+                    </Monitored_Series>
+                    <RemedialAction_Series>
+                        <mRID>PRA_1@-7@</mRID>
+                        <name>PRA_1</name>
+                        <applicationMode_MarketObjectStatus.status>A18</applicationMode_MarketObjectStatus.status>
+                    </RemedialAction_Series>
+                </Constraint_Series>
+                <!-- Contingency B57: Monitored flows, post-contingency thresholds & all active RA references -->
+                <Constraint_Series>
+                    <mRID>cc05136-a928-485b-858e-aa7804881337</mRID>
+                    <businessType>B57</businessType>
+                    <Contingency_Series>
+                        <mRID>Co-1</mRID>
+                        <name>Contingency 1 name</name>
+                    </Contingency_Series>
+                    <Monitored_Series>
+                        <mRID>CNEC-1</mRID>
+                        <name>CNEC-1-name</name>
+                        <RegisteredResource>
+                            <mRID codingScheme="A02">DDE2AA11 NNL3AA11 1</mRID>
+                            <name>CNEC-1</name>
+                            <in_AggregateNode.mRID codingScheme="A02">DDE2AA1</in_AggregateNode.mRID>
+                            <out_AggregateNode.mRID codingScheme="A02">NNL3AA1</out_AggregateNode.mRID>
+                            <Measurements>
+                                <measurementType>A01</measurementType>
+                                <unitSymbol>AMP</unitSymbol>
+                                <positiveFlowIn>A01</positiveFlowIn>
+                                <analogValues.value>2220.0</analogValues.value>
+                            </Measurements>
+                            <Measurements>
+                                <measurementType>A07</measurementType>
+                                <unitSymbol>AMP</unitSymbol>
+                                <positiveFlowIn>A01</positiveFlowIn>
+                                <analogValues.value>15.0</analogValues.value>
+                            </Measurements>
+                        </RegisteredResource>
+                    </Monitored_Series>
+                    <RemedialAction_Series>
+                        <mRID>PRA_1@-7@</mRID>
+                        <name>PRA_1</name>
+                        <applicationMode_MarketObjectStatus.status>A18</applicationMode_MarketObjectStatus.status>
+                    </RemedialAction_Series>
+                    <RemedialAction_Series>
+                        <mRID>HVDC-direction11@100.0@</mRID>
+                        <name>HVDC-direction11@100.0@</name>
+                        <applicationMode_MarketObjectStatus.status>A20</applicationMode_MarketObjectStatus.status>
+                    </RemedialAction_Series>
+                </Constraint_Series>
+                <Reason>
+                    <ReasonCode>
+                        <value>Z13</value>
+                    </ReasonCode>
+                    <text>Network is secure</text>
+                </Reason>
+            </Point>
+        </Period>
+    </TimeSeries>
+</CriticalNetworkElement_MarketDocument>
+```
 
 ## Acronyms
 
