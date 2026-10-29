@@ -40,15 +40,17 @@ new files arrive on the FTP server.
 - **yy** is the forecast hour of the IDCC run 2 process,
 - **v** is the file version.
 
-For more information on the CSE CRAC format, see the [OpenRAO documentation](https://powsybl.readthedocs.io/projects/openrao/en/latest/input-data/crac/cse.html).
+For more information on the IN CRAC format, see the [OpenRAO documentation](https://powsybl.readthedocs.io/projects/openrao/en/latest/input-data/crac/cse.html).
 
-> **?** To be added:
-> - N-2 (Following the blackout in Italy in 2003, Terna's risk management requires systematic monitoring of N-2 contingencies on common support under favorable conditions.)
+:::info N-2 Contingencies
+Following the blackout in Italy in 2003, Terna's risk management requires systematic monitoring of N-2 contingencies on common support under favorable conditions.
+:::
 
 ### GLSK
 
-> **?** To be added:
-> - naming convention
+The GLSK files follow specific file naming conventions:
+- The D2CC process is based on GLSK files named: **YYYYMMDD**_**hhmm**_2D**x**_CO_GSK_CSE**v**.xml
+- The IDCC run 2 process is based on GLSK files named: **YYYYMMDD**_**hhmm**_**yyx**_CO_GSK_CSE**v**.xml
 
 #### General description
 
@@ -131,11 +133,11 @@ In this method, the shift is applied to defined generation/load nodes (PV or PQ 
 
 The participation of node $n$ in the shift among selected generator nodes (GSK) is given by:
 
-**[Note: Formula missing in the original documentation]**
+$K_g(n,a) = G(a) \cdot k_g(n)$
 
 The participation of node $n$ in the shift among selected load nodes (LSK) is given by:
 
-**[Note: Formula missing in the original documentation]**
+$K_l(n,a) = L(a) \cdot k_l(n)$
 
 In the GLSK file, this type of GLSK is defined by the tag **FactorGSKBlock**.
 
@@ -226,8 +228,8 @@ The NTC2 files are only available for the IDCC process, as they contain D-2 data
 
 The files must be named according to the following format: NTC2_**YYYYMMDD**_2D**X_PP**-IT**Z**.xml (where **X** is the day of the week and **PP** is the name of the control area, for instance CH). These files are contained in a folder named 22V-TERNA-ECPPRG_10V-**RRRRRRRRRRRR**_CCC-NTC2_**YYYYMMDD**V**KK** (where **RRRRRRRRRRRR** is a code for the control area, such as SWISS-ECP-P7, and **KK** is the version number).
 
-**TODO** Put this somewhere else:
-- Low-consumption days to be described here? They are days split in 4 intervals, with a strong limitation of the italian import, because of both a low consumption and a high renewable generation share. The import is limited to turn on thermal power stations that could solve the constraints. The planned maintenances impacting the interconnections are scheduled on such low-consumption days, to limit their impact on the available capacity.
+#### Low-consumption days
+Low-consumption days are specific days split into 4 intervals, characterized by a strong limitation of the Italian import due to both low consumption and a high renewable generation share. The import is limited to allow thermal power stations to operate and resolve potential grid constraints. Planned maintenance impacting interconnections is typically scheduled on such days to minimize their impact on available capacity.
 
 ### Target CH
 
@@ -241,13 +243,10 @@ The computation of the special line’s fixed flow:
   - It defines, for example, if line 220 kV Magadino-Soazza is planned to be out-of-service in two days, the target flow on the ML is only 150 MW in Winter instead of Yearly NTCCagno-Mendrisio Value [TTF]. 
   - Swissgrid provides this Yearly Fixed Flow table annually or in case of an update in form of the XML-File “yyyy_Targets_CH_vx.xml” based on its experience. The planned outages, which have an influence on the maximal allowed flow through the Merchant Line, are electrically close to the Merchant Line.
 - Definition of Fixed Flow daily values associated to some lines:
-- For special lines (e.g. merchant lines, lines with target flow, lines not modeled in CGM) a daily value for the Fixed Flow can be provided for each hour of the day as an absolute value of Fixed Flow reduction per Special Line. or via a relative value of Fixed Flow reduction per Special Line . If no daily value is given as input for a given hour (h) it is assumed Fixed Flow per Special Line, h = Yearly Fixed Flow per Special Line,h 
+- For special lines (e.g. merchant lines, lines with target flow, lines not modeled in CGM) a daily value for the Fixed Flow can be provided for each hour of the day as an absolute value of Fixed Flow reduction per Special Line or via a relative value of Fixed Flow reduction per Special Line. If no daily value is given as input for a given hour (h) it is assumed Fixed Flow per Special Line, h = Yearly Fixed Flow per Special Line,h 
 - For special lines (e.g. merchant lines, lines with target flow, lines not modeled in CGM) a daily value for the NTC can be provided for each hour of the day. If no daily value is given as input for a given hour (h) it is assumed NTC per Special Line, h = Yearly NTC per Special Line, h
 
 The file is named: YYYYMMDD_Targets_CH_*.xml.
-
-**TODO** Put this somewhere else:
-- Create a separate section for the special lines somewhere else? (there is a part of it in the NTC subsection)
 
 ## Hardcoded data
 
