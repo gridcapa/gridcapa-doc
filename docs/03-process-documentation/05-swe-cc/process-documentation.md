@@ -10,7 +10,11 @@ sidebar_position: 3
 
 Some business rules for remedial actions optimization are considered by PowSyBl Open RAO framework as part of CRAC definitions. These rules that are not contained in CIM CRAC file itself are added during the conversion from native CIM CRAC format to internal CRAC object actually used for remedial actions optimization.
 
-> **?** Open question: give an example?
+Examples of rules configured through these parameters include:
+- Range action groups (e.g. coupling the two HVDC links `1_HVDC_FRES` and `2_HVDC_FRES`),
+- Range action speeds to simulate automaton priorities,
+- Remedial action usage limits per instant and per TSO (e.g. maximum number of curative remedial actions allowed overall and per TSO),
+- Definition of voltage CNECs.
 
 Voltage CNEC are not explicitely defined in input CRAC, and are added by configuration of the process through the CRAC creation parameters.
 
@@ -29,7 +33,7 @@ If the equivalent AC line was disconnected on one side in the initial network, t
 
 The HVDC line is set to AC mode during the preprocessing.
 
-> **?** Open question: check CreationParameters and check what happens in GridCapa when an element is missing
+If an expected equivalent element is missing from the imported network model, a warning is logged and the process continues if possible or raises an invalid data notification.
 
 ## Dichotomy
 
@@ -156,7 +160,7 @@ The step update strategy follows the rules of a dichotomy: if the lowest unsecur
 
 Assuming that the network is secure for an exchange of 0 MW in the studied direction and considering that 6400 MW is very likely to be unsecure, this step update strategy applies from the second step on (the first being 6400 MW).
 
-> **?** Open questions: What happens if 6400 MW is secure, in theory? Is 6400 MW the installed capacity
+If the upper bound (6400 MW, defined as the maximum TTC parameter) is secure, 6400 MW is retained as the maximum found TTC and the dichotomy terminates.
 
 ### Dichotomy precision
 
@@ -183,7 +187,7 @@ Angle monitoring is the process to check if angle constraints (i.e. limitation o
 The angle constraint represents the physical limit that would make it possible to correctly close back a line after a trip occured.
 If the voltage angle difference is too high, an automaton would disconnect the line automatically.
 
-This process is run after RAO validation, only on PT->ES and ES->PT directions, and if RAO is secure.
+During the dichotomy, this process is run at each step on PT->ES and ES->PT directions when the RAO flow is secure, to assess whether the step is fully secure.
 
 Angle constraints are defined as _AdditionalConstraints_Series_ in CIM CRAC.
 

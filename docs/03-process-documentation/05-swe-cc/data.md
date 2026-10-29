@@ -44,9 +44,7 @@ Where:
 - **YYYY** is the timestamp year
 - **MM** is the timestamp month
 - **DD** is the timestamp day in month
-- *bbb* is ???
-
-> **?** Open question: Check what bbb stands for
+- **bbb** is the file business version or sequence number (e.g. 001)
 
 The CRAC is in CIM format, described in the [related OpenRAO documentation](https://powsybl.readthedocs.io/projects/openrao/en/latest/input-data/crac/cim.html).
 
@@ -58,9 +56,7 @@ Where:
 - **YYYY** is the timestamp year
 - **MM** is the timestamp month
 - **DD** is the timestamp day in month
-- *bbb* is ???
--
-> **?** Open question: Check what bbb stands for
+- **bbb** is the file business version or sequence number (e.g. 001)
 
 The GLSK is in CIM format, described in the [related OpenRAO documentation](https://powsybl.readthedocs.io/projects/entsoe/en/v2.10.0/glsk/glsk-cim.html).
 
@@ -69,9 +65,7 @@ The GLSK is in CIM format, described in the [related OpenRAO documentation](http
 #### GLSK types
 ##### Proportional
 
-This GLSK type is defined with a _businessType_ B42 in a unique _SKBlock_TimeSeries_ (containing no reference to any generator). The _measurement_Unit.name_ used for these GLSKs is C62, meaning ???
-
-> **?** Open question: Check what C62 stands for
+This GLSK type is defined with a _businessType_ B42 in a unique _SKBlock_TimeSeries_ (containing no reference to any generator). The _measurement_Unit.name_ used for these GLSKs is C62, which is the UN/CEFACT code representing "one" / dimensionless ratio (percentage / proportional factors).
 
 The full description of the GLSK CIM is available in the [related OpenRAO documentation](https://powsybl.readthedocs.io/projects/entsoe/en/v2.10.0/glsk/glsk-cim.html) and in [Generation and Load Shift Key document UML model and schema (entsoe.eu)](https://eepublicdownloads.entsoe.eu/clean-documents/EDI/Library/cim_based/schema/Generation_and_Load_Shift_Key_document_UML_model_and_schema_v2.3.pdf).
 
@@ -80,15 +74,11 @@ The full description of the GLSK CIM is available in the [related OpenRAO docume
 This GLSK type is defined with a _businessType_ B45, defined in one _SKBlock_TimeSeries_ for each generator. The generator is identified as a _RegisteredResource_, containing a _resourceCapacity.minimumCapacity_ and a _resourceCapacity.maximumCapacity_.
 AN _attributeInstanceComponent.position_ defines the merit order.
 
-> **?** Open question: Describe more
-
 #### Implementation in SWE
 
 ##### French GSK
 
-The French GSK is defined as a proportional GSK block. It contains nodes referencing only the node name.
-
-> **?** Open question: proportional to ?
+The French GSK is defined as a proportional GSK block. It contains nodes referencing only the node name. The active power shift is distributed proportionally across all participating French generators.
 
 ##### Spanish GSK
 
@@ -153,4 +143,4 @@ For the border between France and Spain, the results of the voltage check are ex
 
 ### TTC file
 
-The highest secure exchange value for each border and direction is exported into an XML file, containing inside Additional_info/physical_echanges the border (from/to) and the value of the TTC.
+The highest secure exchange value for each evaluated border and direction (validated by the dichotomy and post-treatments) is exported into an XML file (`TtcDocument`), containing inside `Additional_info/physical_echanges` the border direction (from/to) and the value of the TTC.
