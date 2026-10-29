@@ -40,7 +40,7 @@ new files arrive on the FTP server.
 - **yy** is the forecast hour of the IDCC run 2 process,
 - **v** is the file version.
 
-For more information on the CSE CRAC format, see the [OpenRAO documentation](https://powsybl.readthedocs.io/projects/openrao/en/latest/input-data/crac/cse.html).
+For more information on the IN CRAC format, see the [OpenRAO documentation](https://powsybl.readthedocs.io/projects/openrao/en/latest/input-data/crac/cse.html).
 
 ## Hardcoded data
 
@@ -54,11 +54,18 @@ Others, if not defined, are set to the default values listed in the documentatio
 
 ### CracCreationParameters
 
+The CracCreationParameters configuration contains the RA usage limits in curative for each TSO in the area.
+For more information, see the [OpenRAO documentation](https://powsybl.readthedocs.io/projects/openrao/en/stable/input-data/crac/creation-parameters.html#).
+
 ### Configmap
+
+The configmap contains specific configuration data for special network elements:
+- references to the Mendrisio-Cagno merchant line,
+- references to the PiSa HVDC link and associated remedial actions.
 
 ## Outputs
 
-### CSE RAO result
+### IN RAO result
 
 The result of the RAO computation is exported in a file named TTC_Calculation_**YYYYMMDD_hhmm**_2D**x**_CO_RAO_Transit_CSE**v**.xml.
 
@@ -70,10 +77,13 @@ The result of the RAO computation is exported in a file named TTC_Calculation_**
 - **x** is the timestamp day of the week number (example: if the day is a Wednesday, x=3; if it's a Sunday, x=7),
 - **v** is the file version.
 
-The file format is in a specific CSE RAO result format in XML.
-
-> **?** To be added:
-> description of the file format
+The file is formatted in XML according to the IN RAO result format:
+- **Timestamp / Time**: Target computation timestamp
+- **Status**: Status of the computation (`SECURE`, `UNSECURE`, or `FAILED`)
+- **Results**:
+  - *Preventive actions*: Set of preventive remedial actions selected by the optimizer (e.g., PST tap changes, HVDC setpoints)
+  - *Preventive branch results*: Monitored branches and calculated flows in preventive state
+  - *Outage results*: For each contingency, the contingency definition, the curative remedial actions activated, and the branch flows after contingency and after curative remedial actions.
 
 ### RAO logs
 
