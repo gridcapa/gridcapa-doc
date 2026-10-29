@@ -48,7 +48,7 @@ For a detailed description of the F120 file, you can refer to the documentation:
 
 ### DC CGM (F139)
 
-The F119 document is a zip containing the 24 networks in UCTE format and an xml header linking the networks to timestamps.
+The F139 document is a zip containing the 24 networks in UCTE format and an xml header linking the networks to timestamps.
 
 This alternative CGM is used to perform the actual NRAO computation, but the chosen remedial actions will be applied on the AC network (F119).
 
@@ -102,14 +102,14 @@ Where:
 
 ### Core CNE (F299)
 
-The F299 file is a zip file containing the Core CNE file per timestamp. it contains among other the flows, thresholds, PTDFs and loop-flow values.
+The F299 file is a zip file containing the Core CNE file per timestamp. It contains among other the flows, thresholds, PTDFs and loop-flow values.
 The description of the format is available in the [OpenRAO documentation](https://powsybl.readthedocs.io/projects/openrao/en/latest/output-data/core-cne.html).
 
 ### ACK file (F302)
 
-The F302 file is an xml file containing the reply of GridCapa on whether the computation succeefded or not.
+The F302 file is an xml file containing the reply of GridCapa on whether the computation succeeded or not.
 
-It follows the naming convention: 22XCORESO------S_10V1001C--00236Y_CORE-FB-F302-ACK_**YYYYMMDD**-F302-**VV**.xml.
+It follows the naming convention: 22XCORESO------S_10V1001C--00236Y_CORE-FB-302-ACK_**YYYYMMDD**-F302-**VV**.xml.
 
 Where:
 - **YYYY** is the year of the timestamp
@@ -142,7 +142,7 @@ The F305 file is an xml file containing the URL of the F299, F303 and F304 files
 
 ### Metadata (F341)
 
-The F341 file is a csv file containing the list of computation durations and hourly computation status. 
+The F341 file is a json file containing the list of computation durations and hourly computation status.
 These individual metadata files are used to perform sanity checks and to gather general metadata information: end-to-end computation durations, overall status.
 
 It follows the naming convention: **YYYYMMDD_hhmm**_METADATA-**VV**.json.

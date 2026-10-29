@@ -43,7 +43,7 @@ The balancing logic in Core CC follows the compensation on all loads, so that th
 To reach this objective, the input network of the NRAO is a DC balanced CGM (F139). The preventive remedial actions (PRAs) 
 selected by the NRAO are then applied on the AC balanced network (F119) for the export of the F304 document.
 
-if the DC CGM is not available, the NRAO will be performed on the AC CGM as fallback strategy.
+If the DC CGM is not available, the NRAO will be performed on the AC CGM as fallback strategy.
 
 ### Loop-flows
 
